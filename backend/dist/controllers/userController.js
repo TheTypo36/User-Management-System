@@ -15,12 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateProfile = exports.getProfile = exports.signIn = exports.createUser = void 0;
 const client_1 = __importDefault(require("../db/client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
         const role = req.body.role;
+        if (!email || !password || !username) {
+            res.status(404).json({
+                message: "password, username and email are required fields for creating a user",
+            });
+            return;
+        }
         const hashPassword = yield bcrypt_1.default.hash(password, 10);
         const user = yield client_1.default.user.create({
             data: {
@@ -48,8 +55,38 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createUser = createUser;
 const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const email = req.body.email;
+        const password = req.body.password;
+        if (!email || !password) {
+            res.status(404).json({ message: "password and email is missing" });
+            return;
+        }
+        const existingUser = yield client_1.default.user.findFirst({
+            where: {
+                email,
+            },
+        });
+        if (!existingUser) {
+            res.status(404).json({ message: "user doesn't existed!!" });
+            return;
+        }
+        const match = yield bcrypt_1.default.compare(password, existingUser.password);
+        if (!match) {
+            res.status(400).json({ message: "password is wrong" });
+            return;
+        }
+        console.log("jwt secret", process.env.JWT_SCERET);
+        const id = existingUser.id;
+        const username = existingUser.username;
+        const token = jsonwebtoken_1.default.sign({ id, username }, process.env.JWT_SCERET);
+        res.status(200).json({ token, message: "user successully signed" });
     }
-    catch (error) { }
+    catch (error) {
+        res
+            .status(500)
+            .json({ message: `internal server error in user creation ${error}` });
+        console.error(error);
+    }
 });
 exports.signIn = signIn;
 const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
