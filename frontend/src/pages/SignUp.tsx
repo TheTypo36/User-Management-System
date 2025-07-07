@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -10,7 +13,7 @@ function SignUp() {
     console.log("Submitted:", { email, password, username });
   };
   return (
-    <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 h-170 shadow-2xl">
+    <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 h-200 shadow-2xl">
       <h2 className="text-4xl font-bold ml-30 mb-15">Sign Up Page</h2>
       <form onSubmit={handleSubmit}>
         <Input
@@ -37,9 +40,16 @@ function SignUp() {
           label="Username"
           onChangeHandler={(e) => setUsername(e.target.value)}
         />
-
         <button type="submit" className="relative left-35 top-8">
           SignUp
+        </button>
+        <hr className="my-10" />
+        <h3 className="relative left-45 text-xl">or</h3>
+        <button
+          onClick={() => navigate("/signIn")}
+          className="relative left-35"
+        >
+          signIn
         </button>
       </form>
     </div>

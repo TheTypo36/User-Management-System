@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,9 +30,16 @@ function SignIn() {
           label="Password"
           onChangeHandler={(e) => setPassword(e.target.value)}
         />
-
         <button type="submit" className="relative left-35 top-8">
           SignIn
+        </button>
+        <hr className="my-10" />
+        <h3 className="relative left-45 text-xl">or</h3>
+        <button
+          onClick={() => navigate("/signUp")}
+          className="relative left-35"
+        >
+          signUp
         </button>
       </form>
     </div>
