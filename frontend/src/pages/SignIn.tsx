@@ -28,11 +28,11 @@ function SignIn() {
           label="Password"
           onChangeHandler={(e) => setPassword(e.target.value)}
         />
-      </form>
 
-      <button type="submit" className="relative left-35 top-8">
-        SignUp
-      </button>
+        <button type="submit" className="relative left-35 top-8">
+          SignIn
+        </button>
+      </form>
     </div>
   );
 }

@@ -7,7 +7,7 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(email, password, username);
+    console.log("Submitted:", { email, password, username });
   };
   return (
     <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 h-170 shadow-2xl">
@@ -37,11 +37,11 @@ function SignUp() {
           label="Username"
           onChangeHandler={(e) => setUsername(e.target.value)}
         />
-      </form>
 
-      <button type="submit" className="relative left-35 top-8">
-        SignUp
-      </button>
+        <button type="submit" className="relative left-35 top-8">
+          SignUp
+        </button>
+      </form>
     </div>
   );
 }
