@@ -1,20 +1,30 @@
-import React from "react";
-
 interface inputProps {
+  type: string;
+  value: string;
   placeholder: string;
-  onChangeHandler: () => void;
-  type: "string";
+  onChangeHandler: (e: any) => void;
   label: string;
   id: string;
 }
-function Input({ placeholder, onChangeHandler, type, label, id }: inputProps) {
+function Input({
+  placeholder,
+  value,
+  onChangeHandler,
+  type,
+  label,
+  id,
+}: inputProps) {
   return (
-    <div>
-      <label htmlFor={id}>{label}</label>
+    <div className="m-4 flex flex-col w-full h-full text-2xl">
+      <label htmlFor={id} className="m-2">
+        {label}
+      </label>
       <input
+        className="p-2 bg-gray-100 rounded-md w-sm h-15"
+        type={type}
+        value={value}
         placeholder={placeholder}
         id={id}
-        type={type}
         onChange={onChangeHandler}
       />
     </div>
