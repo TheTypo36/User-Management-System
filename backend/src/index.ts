@@ -29,6 +29,8 @@ const port = process.env.PORT || 8083;
 app.listen(port, () => {
   console.log(`server is running at ${port}`);
 });
-import userRouter from "./routes/userRoutes";
+import authControllers from "./routes/authRoutes";
+import userControllers from "./routes/userRoutes";
+app.use("/api/v1/auth", authControllers);
 
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/user", userControllers);

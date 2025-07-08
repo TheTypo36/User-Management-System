@@ -28,5 +28,7 @@ const port = process.env.PORT || 8083;
 app.listen(port, () => {
     console.log(`server is running at ${port}`);
 });
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+app.use("/api/v1/auth", authRoutes_1.default);
 app.use("/api/v1/user", userRoutes_1.default);

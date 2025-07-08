@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../db/client";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
-export const createUser = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
     const email = req.body.email;
@@ -93,18 +93,4 @@ export const signIn = async (req: Request, res: Response) => {
       .json({ message: `internal server error in user creation ${error}` });
     console.error(error);
   }
-};
-export const getProfile = async (req: Request, res: Response) => {
-  try {
-  } catch (error) {}
-};
-
-export const updateProfile = async (req: Request, res: Response) => {
-  try {
-  } catch (error) {}
-};
-
-export const deleteUser = async (req: Request, res: Response) => {
-  try {
-  } catch (error) {}
 };

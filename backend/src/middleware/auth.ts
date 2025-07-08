@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
+enum sortWays {
+  desc,
+  Asc,
+}
 export interface newReq extends Request {
   user?: {
     id: number;
@@ -56,4 +60,24 @@ export const authVerify = async (
   } catch (error) {
     res.status(500).json({ message: `internal server error ${error}` });
   }
+};
+
+export const authorize = (roles: string[]) => {
+  return (req: newReq, res: Response, next: NextFunction): void => {
+    if (!req.user) {
+      res
+        .status(401)
+        .json({ message: "Access denied. User not authenticated." });
+      return;
+    }
+
+    if (!roles.includes(req.user.role)) {
+      res
+        .status(403)
+        .json({ message: "Access denied. Insufficient permissions." });
+      return;
+    }
+
+    next();
+  };
 };
