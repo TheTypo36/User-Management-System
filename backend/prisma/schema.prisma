@@ -30,6 +30,16 @@ model User {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   isDeleted Boolean @default(false)
+  audits    AuditLog[]
+}
 
+model AuditLog{
+  id            Int @default(autoincrement()) @id
+  action        String
+  performedBy   Int
+  ipAddress     String?
+  target        String?
+  createdAt     DateTime @default(now())
+  user          User @relation(fields: [performedBy], references: [id])
 }
 

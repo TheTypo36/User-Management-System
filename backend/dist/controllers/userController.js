@@ -22,6 +22,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const email = req.body.email;
         const password = req.body.password;
         const role = req.body.role;
+        console.log("email ", email, " username ", username, " password ", password, " role ", role);
         if (!email || !password || !username) {
             res.status(404).json({
                 message: "password, username and email are required fields for creating a user",
