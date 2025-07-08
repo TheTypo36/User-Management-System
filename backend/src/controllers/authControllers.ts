@@ -35,6 +35,15 @@ export const register = async (req: Request, res: Response) => {
         password: hashPassword,
         role,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updateAt: true,
+        isDeleted: true,
+      },
     });
 
     if (!user) {
@@ -44,7 +53,17 @@ export const register = async (req: Request, res: Response) => {
       return;
     }
 
-    res.status(200).json({ user, message: "user successfull created!!" });
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.SECRET_JWT as string
+    );
+    res
+      .status(200)
+      .json({ user, token, message: "user successfull created!!" });
   } catch (error) {
     res
       .status(500)
@@ -65,6 +84,16 @@ export const signIn = async (req: Request, res: Response) => {
       where: {
         email,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        password: true,
+        createdAt: true,
+        updateAt: true,
+        isDeleted: true,
+      },
     });
 
     if (!existingUser) {
@@ -82,7 +111,11 @@ export const signIn = async (req: Request, res: Response) => {
     const id = existingUser.id;
     const username = existingUser.username;
     const token = jwt.sign(
-      { id, username } as JwtPayload,
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+        role: existingUser.role,
+      } as JwtPayload,
       process.env.JWT_SCERET as string
     );
 

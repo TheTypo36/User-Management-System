@@ -291,3 +291,44 @@ export const createUser = async (req: newReq, res: Response) => {
     res.status(500).json({ message: `internal server error ${error}` });
   }
 };
+
+export const getProfileById = async (req: newReq, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (!id) {
+      res.status(404).json({ message: "id required" });
+      return;
+    }
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        username: true,
+        email: true,
+        password: true,
+        role: true,
+        createdAt: true,
+        updateAt: true,
+      },
+    });
+
+    if (!existingUser) {
+      res.status(404).json({ message: "no user found with this email" });
+      return;
+    }
+
+    if (req.user?.role === "SUB_ADMIN" && existingUser.role !== "USER") {
+      res.status(403).json({ message: "insuccifient permission" });
+      return;
+    }
+
+    res
+      .status(202)
+      .json({ existingUser, message: "successfull fetch the user" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `internal server error ${error}` });
+  }
+};

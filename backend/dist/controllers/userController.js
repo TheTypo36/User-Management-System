@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.deleteUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
+exports.getProfileById = exports.createUser = exports.deleteUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
 const client_1 = __importDefault(require("../db/client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -264,3 +264,42 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const id = parseInt(req.params.id);
+        if (!id) {
+            res.status(404).json({ message: "id required" });
+            return;
+        }
+        const existingUser = yield client_1.default.user.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                username: true,
+                email: true,
+                password: true,
+                role: true,
+                createdAt: true,
+                updateAt: true,
+            },
+        });
+        if (!existingUser) {
+            res.status(404).json({ message: "no user found with this email" });
+            return;
+        }
+        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && existingUser.role !== "USER") {
+            res.status(403).json({ message: "insuccifient permission" });
+            return;
+        }
+        res
+            .status(202)
+            .json({ existingUser, message: "successfull fetch the user" });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: `internal server error ${error}` });
+    }
+});
+exports.getProfileById = getProfileById;
