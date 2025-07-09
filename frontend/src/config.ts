@@ -7,6 +7,8 @@ const API_URLS = {
   LOGIN: () => `${BASE_URL}${import.meta.env.VITE_AUTH_SIGN_IN}`,
   REGISTER: () => `${BASE_URL}${import.meta.env.VITE_AUTH_REGISTER}`,
   CREATE_USER: () => `${BASE_URL}${import.meta.env.VITE_USER_CREATE_USER}`,
+  DEACTIVATE_USER: (userId: number) =>
+    `${BASE_URL}${import.meta.env.VITE_USER_DEACTIVATE_USER}/${userId}`,
   DELETE_USER: (userId: number) =>
     `${BASE_URL}${import.meta.env.VITE_USER_DELETE_USER}/${userId}`,
   UPDATE_USER: (userId: number) =>

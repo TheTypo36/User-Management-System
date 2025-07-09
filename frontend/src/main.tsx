@@ -11,7 +11,7 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AuditLog from "./pages/AuditLog.tsx";
-import { UserActivites } from "./pages/UserActivites.tsx";
+import { UserActivites } from "./pages/UserActivities.tsx";
 import ProfileById from "./pages/ProfileById.tsx";
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
@@ -28,7 +28,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auditlog" element={<AuditLog />} />
           <Route
-            path="/user-activites/:activites/:id"
+            path="/user-activities/:activities/:id"
             element={<UserActivites />}
           />
         </Routes>

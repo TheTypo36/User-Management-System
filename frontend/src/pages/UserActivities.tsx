@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import Input from "../components/Input";
@@ -8,19 +8,39 @@ import { API_URLS } from "../config";
 
 export const UserActivites = () => {
   const navigate = useNavigate();
-  const params = useParams<{ activites: string; Id?: string }>();
+  const params = useParams<{ activities: string; id?: string }>();
 
-  const activites = params.activites;
+  const activities = params.activities;
+  console.log("activities ", activities);
+  const id = params.id ?? "";
 
-  const id = params.Id ?? "";
-
-  const numericId = parseInt(id);
+  const numericId = parseInt(id as string);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("USER");
   const { isLoggedIn, user, token } = useAuth();
-
+  useEffect(() => {
+    if (activities == "Update_User") {
+      console.log(" hello ", id, numericId);
+      axios
+        .get(API_URLS.GET_PROFILE_BY_ID(numericId), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response);
+          setEmail(response.data.existingUser.email);
+          setUsername(response.data.existingUser.username);
+          setRole(response.data.existingUser.role);
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
+  }, [token]);
   if (!isLoggedIn) {
     navigate("/signIn");
   }
@@ -29,8 +49,8 @@ export const UserActivites = () => {
   }
   const handleSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(activites);
-    if (activites === "Create_User") {
+    console.log(activities);
+    if (activities === "Create_User") {
       axios
         .post(
           API_URLS.CREATE_USER(),
@@ -55,22 +75,32 @@ export const UserActivites = () => {
           console.error(error);
           toast.error("failed to perform the task");
         });
-    } else if (activites === "Updated_User") {
-      axios.post(
-        API_URLS.UPDATE_USER(numericId),
-        {
-          email,
-          password,
-          username,
-          role,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+    } else if (activities === "Update_User") {
+      axios
+        .put(
+          API_URLS.UPDATE_USER(numericId),
+          {
+            id,
+            email,
+            password,
+            username,
+            role,
           },
-          withCredentials: true,
-        }
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          toast.success("user updates");
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
     } else {
       toast.error("failed to perform the task");
     }
@@ -89,7 +119,7 @@ export const UserActivites = () => {
         pauseOnHover
         theme="light"
       />
-      <h2 className="text-4xl font-bold ml-20 mb-5">{activites} Page</h2>
+      <h2 className="text-4xl font-bold ml-20 mb-5">{activities} Page</h2>
       <form onSubmit={handleSubmitBtn}>
         <Input
           type="email"
@@ -99,14 +129,16 @@ export const UserActivites = () => {
           label="Email"
           onChangeHandler={(e) => setEmail(e.target.value)}
         />
-        <Input
-          type="password"
-          placeholder="enter the password"
-          id="password"
-          value={password}
-          label="Password"
-          onChangeHandler={(e) => setPassword(e.target.value)}
-        />
+        {activities !== "Update_User" && (
+          <Input
+            type="password"
+            placeholder="enter the password"
+            id="password"
+            value={password}
+            label="Password"
+            onChangeHandler={(e) => setPassword(e.target.value)}
+          />
+        )}
         <Input
           type="text"
           placeholder="enter the username"
@@ -130,7 +162,7 @@ export const UserActivites = () => {
           </option>
         </select>
         <button type="submit" className="relative left-4 top-15">
-          {activites}
+          {activities}
         </button>
       </form>
       <hr className="mt-20 mb-10" />

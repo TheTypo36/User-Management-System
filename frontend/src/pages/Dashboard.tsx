@@ -88,7 +88,7 @@ const Dashboard = () => {
             </button>
           )}
           <button
-            onClick={() => navigate(`/user-activites/Create_User/0`)}
+            onClick={() => navigate(`/user-activities/Create_User`)}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
           >
             + Add New User

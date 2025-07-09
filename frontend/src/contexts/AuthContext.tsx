@@ -12,7 +12,7 @@ export interface UserData {
   role: string;
   createdAt: Date;
   updatedAt: Date;
-  isDeletedBy: boolean;
+  isDeleted: boolean;
   avatar: string;
 }
 
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       role: localStorage.getItem("role") || "",
       createdAt: new Date(), // You can store actual date if needed
       updatedAt: new Date(),
-      isDeletedBy: localStorage.getItem("isDeleted") === "true",
+      isDeleted: localStorage.getItem("isDeleted") === "true",
       avatar: localStorage.getItem("avatar") || "",
     };
 

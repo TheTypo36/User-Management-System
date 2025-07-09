@@ -30,7 +30,7 @@ model User {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   isDeleted Boolean @default(false)
-  audits    AuditLog[]
+  audits    AuditLog[] 
 }
 
 model AuditLog{
@@ -40,6 +40,6 @@ model AuditLog{
   ipAddress     String?
   target        String?
   createdAt     DateTime @default(now())
-  user          User @relation(fields: [performedBy], references: [id])
+  user          User @relation(fields: [performedBy], references: [id], onDelete: Cascade)
 }
 

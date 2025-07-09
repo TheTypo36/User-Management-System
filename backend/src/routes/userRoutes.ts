@@ -7,6 +7,7 @@ import {
   createUser,
   deleteUser,
   getProfileById,
+  deactivateUser,
   getAllAudits,
 } from "../controllers/userController";
 
@@ -29,9 +30,12 @@ router
   .route("/update-profile/:id")
   .put(authorize(["ADMIN", "SUB_ADMIN"]), updateProfile);
 router
-  .route("/delete-user/:id")
-  .put(authorize(["ADMIN", "SUB_ADMIN"]), deleteUser);
+  .route("/deactivate-user/:id")
+  .put(authorize(["ADMIN", "SUB_ADMIN"]), deactivateUser);
 
+router
+  .route("/delete-user/:id")
+  .delete(authorize(["ADMIN", "SUB_ADMIN"]), deleteUser);
 router
   .route("/get-all-audits")
   .get(authorize(["ADMIN", "SUB_ADMIN"]), getAllAudits);

@@ -118,18 +118,22 @@ export const updateProfile = async (req: newReq, res: Response) => {
     const isDeleted = req.body.isDeleted;
     const id = parseInt(req.body.id);
 
-    const userTobeUpadate = await prisma?.user.findUnique({
+    const userTobeUpdate = await prisma?.user.findUnique({
       where: {
         id: id,
       },
     });
+    if (!userTobeUpdate) {
+      res.status(404).json({ message: "user not found" });
+      return;
+    }
 
-    if (req.user?.role === "SUB_ADMIN" || userTobeUpadate?.role !== "USER") {
+    if (req.user?.role === "SUB_ADMIN" && userTobeUpdate?.role !== "USER") {
       res.status(403).json({ message: "insufficient permission" });
       return;
     }
 
-    if (req.user?.role === "USER" && req.user?.id !== userTobeUpadate.id) {
+    if (req.user?.role === "USER" && req.user?.id !== userTobeUpdate.id) {
       res.status(403).json({ message: "insufficient permission" });
       return;
     }
@@ -147,7 +151,7 @@ export const updateProfile = async (req: newReq, res: Response) => {
 
     const updatedUser = await prisma?.user.update({
       where: {
-        id: userTobeUpadate.id,
+        id: userTobeUpdate.id,
       },
       data: userData,
       select: {
@@ -166,7 +170,7 @@ export const updateProfile = async (req: newReq, res: Response) => {
         action: "Updated_User",
         performedBy: user.id,
         ipAddress: req.ip,
-        target: userTobeUpadate.email,
+        target: userTobeUpdate.email,
       },
     });
 
@@ -181,7 +185,7 @@ export const updateProfile = async (req: newReq, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: newReq, res: Response) => {
+export const deactivateUser = async (req: newReq, res: Response) => {
   try {
     const id = parseInt(req.params.id);
 
@@ -189,6 +193,8 @@ export const deleteUser = async (req: newReq, res: Response) => {
       res.status(400).json({ message: "userid required" });
       return;
     }
+
+    console.log("id", id);
 
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -222,7 +228,7 @@ export const deleteUser = async (req: newReq, res: Response) => {
     const userId = req.user?.id as number;
     const audit = await prisma.auditLog.create({
       data: {
-        action: "Delete_User",
+        action: "Deactivate_user",
         performedBy: userId,
         target: existingUser?.email,
         ipAddress: req.ip,
@@ -231,13 +237,64 @@ export const deleteUser = async (req: newReq, res: Response) => {
 
     res
       .status(200)
-      .json({ existingUser, audit, message: "successfull deleted user" });
+      .json({ existingUser, audit, message: "successfull deactivated user" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: `internal server error ${error}` });
   }
 };
 
+export const deleteUser = async (req: newReq, res: Response) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (!id) {
+      res.status(400).json({ message: "userid required" });
+      return;
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        username: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updateAt: true,
+        isDeleted: true,
+        avatar: true,
+      },
+    });
+
+    if (req.user?.role === "SUB_ADMIN" && existingUser?.role !== "USER") {
+      res.status(403).json({ message: "insufficient permission" });
+      return;
+    }
+
+    await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+    const userId = req.user?.id as number;
+    const audit = await prisma.auditLog.create({
+      data: {
+        action: "Deactivate_user",
+        performedBy: userId,
+        target: existingUser?.email,
+        ipAddress: req.ip,
+      },
+    });
+    res
+      .status(200)
+      .json({ existingUser, audit, message: "successfull deleted user" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `internal server error ${error}` });
+  }
+};
 export const createUser = async (req: newReq, res: Response) => {
   try {
     const { username, email, password, role } = req.body;

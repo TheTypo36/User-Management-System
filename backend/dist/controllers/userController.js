@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllAudits = exports.getProfileById = exports.createUser = exports.deleteUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
+exports.getAllAudits = exports.getProfileById = exports.createUser = exports.deleteUser = exports.deactivateUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
 const client_1 = __importDefault(require("../db/client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -107,16 +107,20 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const role = req.body.role;
         const isDeleted = req.body.isDeleted;
         const id = parseInt(req.body.id);
-        const userTobeUpadate = yield (client_1.default === null || client_1.default === void 0 ? void 0 : client_1.default.user.findUnique({
+        const userTobeUpdate = yield (client_1.default === null || client_1.default === void 0 ? void 0 : client_1.default.user.findUnique({
             where: {
                 id: id,
             },
         }));
-        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" || (userTobeUpadate === null || userTobeUpadate === void 0 ? void 0 : userTobeUpadate.role) !== "USER") {
+        if (!userTobeUpdate) {
+            res.status(404).json({ message: "user not found" });
+            return;
+        }
+        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && (userTobeUpdate === null || userTobeUpdate === void 0 ? void 0 : userTobeUpdate.role) !== "USER") {
             res.status(403).json({ message: "insufficient permission" });
             return;
         }
-        if (((_b = req.user) === null || _b === void 0 ? void 0 : _b.role) === "USER" && ((_c = req.user) === null || _c === void 0 ? void 0 : _c.id) !== userTobeUpadate.id) {
+        if (((_b = req.user) === null || _b === void 0 ? void 0 : _b.role) === "USER" && ((_c = req.user) === null || _c === void 0 ? void 0 : _c.id) !== userTobeUpdate.id) {
             res.status(403).json({ message: "insufficient permission" });
             return;
         }
@@ -127,7 +131,7 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         const updatedUser = yield (client_1.default === null || client_1.default === void 0 ? void 0 : client_1.default.user.update({
             where: {
-                id: userTobeUpadate.id,
+                id: userTobeUpdate.id,
             },
             data: userData,
             select: {
@@ -145,7 +149,7 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 action: "Updated_User",
                 performedBy: user.id,
                 ipAddress: req.ip,
-                target: userTobeUpadate.email,
+                target: userTobeUpdate.email,
             },
         }));
         res.status(202).json({
@@ -160,7 +164,7 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateProfile = updateProfile;
-const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deactivateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
         const id = parseInt(req.params.id);
@@ -168,6 +172,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(400).json({ message: "userid required" });
             return;
         }
+        console.log("id", id);
         const existingUser = yield client_1.default.user.findUnique({
             where: {
                 id,
@@ -197,7 +202,57 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
         const audit = yield client_1.default.auditLog.create({
             data: {
-                action: "Delete_User",
+                action: "Deactivate_user",
+                performedBy: userId,
+                target: existingUser === null || existingUser === void 0 ? void 0 : existingUser.email,
+                ipAddress: req.ip,
+            },
+        });
+        res
+            .status(200)
+            .json({ existingUser, audit, message: "successfull deactivated user" });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: `internal server error ${error}` });
+    }
+});
+exports.deactivateUser = deactivateUser;
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const id = parseInt(req.params.id);
+        if (!id) {
+            res.status(400).json({ message: "userid required" });
+            return;
+        }
+        const existingUser = yield client_1.default.user.findUnique({
+            where: {
+                id,
+            },
+            select: {
+                username: true,
+                email: true,
+                role: true,
+                createdAt: true,
+                updateAt: true,
+                isDeleted: true,
+                avatar: true,
+            },
+        });
+        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && (existingUser === null || existingUser === void 0 ? void 0 : existingUser.role) !== "USER") {
+            res.status(403).json({ message: "insufficient permission" });
+            return;
+        }
+        yield client_1.default.user.delete({
+            where: {
+                id,
+            },
+        });
+        const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+        const audit = yield client_1.default.auditLog.create({
+            data: {
+                action: "Deactivate_user",
                 performedBy: userId,
                 target: existingUser === null || existingUser === void 0 ? void 0 : existingUser.email,
                 ipAddress: req.ip,
