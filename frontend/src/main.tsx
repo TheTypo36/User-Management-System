@@ -12,6 +12,7 @@ import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AuditLog from "./pages/AuditLog.tsx";
 import { UserActivites } from "./pages/UserActivites.tsx";
+import ProfileById from "./pages/ProfileById.tsx";
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <BrowserRouter>
@@ -23,6 +24,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profileById/:id" element={<ProfileById />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auditlog" element={<AuditLog />} />
           <Route

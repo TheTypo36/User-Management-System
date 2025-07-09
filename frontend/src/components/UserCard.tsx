@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { UserData } from "../contexts/AuthContext";
 
 interface userProps {
@@ -5,11 +6,18 @@ interface userProps {
 }
 
 const UserCard = (props: userProps) => {
-  const { avatar, username, email, createdAt, role } = props.user;
+  const { avatar, username, email, createdAt, role, id } = props.user;
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/ProfileById/${id}`);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 hover:shadow-lg transition duration-300 w-full">
-      <div className="flex items-center gap-4 min-w-[250px]">
+      <div
+        className="flex items-center gap-4 min-w-[250px]"
+        onClick={handleClick}
+      >
         <img
           src={avatar ? avatar : "./avatar.webp"}
           alt="User Avatar"

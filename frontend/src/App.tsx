@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContext";
+import { useEffect } from "react";
 
 function App() {
   const navigate = useNavigate();
   const handleStart = () => {
     navigate("/landing-page");
   };
+
+  const { isLoggedIn, user } = useAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/profile");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex sm:w-100 md:w-160 lg:w-250 flex-col justify-center items-center bg-gradient-to-br from-gray-100 to-gray-300 px-4 text-center">

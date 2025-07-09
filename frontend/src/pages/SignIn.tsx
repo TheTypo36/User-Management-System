@@ -32,7 +32,7 @@ function SignIn() {
         console.log(response);
         login(response.data.user, response.data.token);
         toast.success("user successfully logged");
-        navigate("/profile");
+        navigate("/profile/");
       })
       .catch((error) => {
         console.error(error);

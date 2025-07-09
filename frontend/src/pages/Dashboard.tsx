@@ -45,7 +45,7 @@ const Dashboard = () => {
   }, [limit, page]);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-6">
+    <div className="min-h-screen bg-gray-100 py-12 px-6 mt-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-5xl font-bold text-gray-800 mb-3">Dashboard</h1>
