@@ -7,6 +7,7 @@ import {
   createUser,
   deleteUser,
   getProfileById,
+  getAllAudits,
 } from "../controllers/userController";
 
 const router = Router();
@@ -31,6 +32,8 @@ router
   .route("/delete-user/:id")
   .put(authorize(["ADMIN", "SUB_ADMIN"]), deleteUser);
 
-router.route("/get-all-audits").get(authorize(["ADMIN", "SUB_ADMIN"]));
+router
+  .route("/get-all-audits")
+  .get(authorize(["ADMIN", "SUB_ADMIN"]), getAllAudits);
 
 export default router;

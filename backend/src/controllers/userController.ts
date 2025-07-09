@@ -244,7 +244,10 @@ export const createUser = async (req: newReq, res: Response) => {
 
     if (req.user?.role === "SUB_ADMIN" && role !== "USER") {
       res.status(403).json({ message: "sufficient permission not present" });
+      return;
     }
+
+    console.log("inside create user", username, role);
 
     const existingUser = await prisma.user.findUnique({
       where: {
@@ -273,8 +276,10 @@ export const createUser = async (req: newReq, res: Response) => {
       },
     });
     if (!user) {
+      res.status(500).json({ message: "User creation failed" });
       return;
     }
+    console.log("created user");
     const id = req.user?.id as number;
 
     const audit = await prisma.auditLog.create({

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
@@ -8,7 +8,11 @@ import { API_URLS } from "../config";
 
 export const UserActivites = () => {
   const navigate = useNavigate();
-  const { activites, id } = useParams<{ activites: string; Id: string }>();
+  const params = useParams<{ activites: string; Id?: string }>();
+
+  const activites = params.activites;
+
+  const id = params.Id ?? "";
 
   const numericId = parseInt(id);
   const [email, setEmail] = useState("");
@@ -23,26 +27,37 @@ export const UserActivites = () => {
   if (user?.role === "USER") {
     navigate("/profile");
   }
-  const handleSubmitBtn = () => {
+  const handleSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(activites);
     if (activites === "Create_User") {
-      axios.post(
-        API_URLS.CREATE_USER(),
-        {
-          email,
-          password,
-          username,
-          role,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      axios
+        .post(
+          API_URLS.CREATE_USER(),
+          {
+            email,
+            password,
+            username,
+            role,
           },
-          withCredentials: true,
-        }
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        )
+        .then((Response) => {
+          console.log(Response);
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("failed to perform the task");
+        });
     } else if (activites === "Updated_User") {
       axios.post(
-        API_URLS.UPDATE_USER(id),
+        API_URLS.UPDATE_USER(numericId),
         {
           email,
           password,
@@ -57,6 +72,7 @@ export const UserActivites = () => {
         }
       );
     } else {
+      toast.error("failed to perform the task");
     }
   };
   return (
@@ -106,7 +122,9 @@ export const UserActivites = () => {
           onChange={(e) => setRole(e.target.value)}
         >
           {user?.role === "ADMIN" && <option value="ADMIN">ADMIN</option>}
-          <option value="SUB_ADMIN">SUB_ADMIN</option>
+          {user?.role === "ADMIN" && (
+            <option value="SUB_ADMIN">SUB_ADMIN</option>
+          )}
           <option defaultChecked value="USER">
             USER
           </option>

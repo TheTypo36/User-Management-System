@@ -219,7 +219,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { username, email, password, role } = req.body;
         if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && role !== "USER") {
             res.status(403).json({ message: "sufficient permission not present" });
+            return;
         }
+        console.log("inside create user", username, role);
         const existingUser = yield client_1.default.user.findUnique({
             where: {
                 email,
@@ -247,8 +249,10 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             },
         });
         if (!user) {
+            res.status(500).json({ message: "User creation failed" });
             return;
         }
+        console.log("created user");
         const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
         const audit = yield client_1.default.auditLog.create({
             data: {
