@@ -19,4 +19,5 @@ router
 router
     .route("/delete-user/:id")
     .put((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.deleteUser);
+router.route("/get-all-audits").get((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]));
 exports.default = router;

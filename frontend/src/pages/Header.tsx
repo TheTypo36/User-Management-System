@@ -9,14 +9,14 @@ function Header() {
     logout();
   };
   return (
-    <div className="fixed top-0 left-0 w-full h-30 bg-gray-700  p-5 text-red-900">
+    <div className="fixed top-0 left-0 w-full h-30 flex flex-row justify-between bg-gray-700  p-5 text-red-900">
       <h1 onClick={() => navigate("/")} className="cursor-pointer">
         User Managment
       </h1>
 
       {isLoggedIn && (
         <div>
-          <h2>hello, {user?.username}</h2>
+          <div>hello, {user?.username}</div>
           {user?.role !== "USER" && (
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           )}

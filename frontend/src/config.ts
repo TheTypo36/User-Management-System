@@ -14,6 +14,7 @@ const API_URLS = {
   GET_PROFILE: () => `${BASE_URL}${import.meta.env.VITE_USER_GET_PROFILE}`,
   GET_PROFILE_BY_ID: (userId: number) =>
     `${BASE_URL}${import.meta.env.VITE_USER_GET_PROFILE_BY_ID}/${userId}`,
+  GET_AUDITS: () => `${BASE_URL}${import.meta.env.VITE_USER_ALL_AUDITS}`,
 };
 
 export { API_URLS };

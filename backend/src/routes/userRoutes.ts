@@ -28,4 +28,6 @@ router
 router
   .route("/delete-user/:id")
   .put(authorize(["ADMIN", "SUB_ADMIN"]), deleteUser);
+
+router.route("/get-all-audits").get(authorize(["ADMIN", "SUB_ADMIN"]));
 export default router;

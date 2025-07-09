@@ -333,3 +333,30 @@ export const getProfileById = async (req: newReq, res: Response) => {
     res.status(500).json({ message: `internal server error ${error}` });
   }
 };
+
+export const getAllAudits = async (req: newReq, res: Response) => {
+  try {
+    const role = req.user?.role;
+    if (role === "USER") {
+      res.status(403).json({ message: "insufficient permission" });
+      return;
+    }
+
+    const audits = await prisma.auditLog.findMany({
+      include: {
+        user: {
+          select: {
+            username: true,
+            role: true,
+          },
+        },
+      },
+    });
+    res.status(202).json({ audits, message: "succesfully fetch all audits" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: `internal server error in fetching audits ${error}` });
+  }
+};

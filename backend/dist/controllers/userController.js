@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfileById = exports.createUser = exports.deleteUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
+exports.getAllAudits = exports.getProfileById = exports.createUser = exports.deleteUser = exports.updateProfile = exports.getProfile = exports.getAllUser = void 0;
 const client_1 = __importDefault(require("../db/client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -304,3 +304,22 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getProfileById = getProfileById;
+const getAllAudits = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const role = (_a = req.user) === null || _a === void 0 ? void 0 : _a.role;
+        if (role === "USER") {
+            res.status(403).json({ message: "insufficient permission" });
+            return;
+        }
+        const audits = yield client_1.default.auditLog.findMany();
+        res.status(202).json({ audits, message: "succesfully fetch all audits" });
+    }
+    catch (error) {
+        console.error(error);
+        res
+            .status(500)
+            .json({ message: `internal server error in fetching audits ${error}` });
+    }
+});
+exports.getAllAudits = getAllAudits;
