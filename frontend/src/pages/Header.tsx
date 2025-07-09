@@ -10,7 +10,7 @@ function Header() {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50">
+    <div className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 h-20">
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
         <h1
           onClick={() => navigate("/")}
