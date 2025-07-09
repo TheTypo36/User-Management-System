@@ -13,7 +13,9 @@ const router = Router();
 
 router.use(authVerify);
 
-router.get("/", authorize(["ADMIN", "SUB_ADMIN"]), getAllUser);
+router
+  .route("/get-all-user")
+  .get(authorize(["ADMIN", "SUB_ADMIN"]), getAllUser);
 
 router
   .route("/get-profile-by-id/:id")
@@ -30,4 +32,5 @@ router
   .put(authorize(["ADMIN", "SUB_ADMIN"]), deleteUser);
 
 router.route("/get-all-audits").get(authorize(["ADMIN", "SUB_ADMIN"]));
+
 export default router;

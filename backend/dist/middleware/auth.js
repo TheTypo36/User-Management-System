@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorize = exports.authVerify = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const client_1 = __importDefault(require("../db/client"));
 var sortWays;
 (function (sortWays) {
     sortWays[sortWays["desc"] = 0] = "desc";
@@ -22,6 +23,7 @@ var sortWays;
 const authVerify = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers["authorization"];
     const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.split(" ")[1];
+    console.log("token", token);
     if (!token) {
         res.status(400).json({
             message: "unauthorized user",
@@ -33,12 +35,15 @@ const authVerify = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     try {
         const decodedToken = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        console.log("decoded token", decodedToken);
         if (typeof decodedToken === "string") {
+            console.error("error decodedtoken is invalid");
+            res.status(400).json({ message: "token error" });
             return;
         }
-        const user = yield (prisma === null || prisma === void 0 ? void 0 : prisma.user.findUnique({
+        const user = yield client_1.default.user.findUnique({
             where: {
-                id: decodedToken.userId,
+                id: decodedToken.id,
             },
             select: {
                 id: true,
@@ -48,7 +53,8 @@ const authVerify = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 createdAt: true,
                 isDeleted: true,
             },
-        }));
+        });
+        console.log("user", user);
         if (!user) {
             res.status(400).json({ message: "error in authorization" });
             return;

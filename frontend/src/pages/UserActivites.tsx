@@ -1,48 +1,28 @@
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Input from "../components/Input";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_URLS } from "../config";
-import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 
-function SignUp() {
+export const UserActivites = () => {
   const navigate = useNavigate();
-  const { login, isLoggedIn } = useAuth();
-  if (isLoggedIn) {
-    navigate("/profile");
-  }
+  const { activites } = useParams<{ activites: string }>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Submitted:", { email, password, username });
+  const { isLoggedIn, user } = useAuth();
 
-    axios
-      .post(
-        API_URLS.REGISTER(),
-        {
-          email,
-          password,
-          username,
-          role: "USER",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        login(response.data.user, response.data.token);
-        toast.success("user successfully register and logged In");
-        navigate("/profile");
-      })
-      .catch((error) => {
-        toast.error(`${error.message}`);
-      });
+  if (!isLoggedIn) {
+    navigate("/signIn");
+  }
+  if (user?.role === "USER") {
+    navigate("/profile");
+  }
+  const handleSubmitBtn = () => {
+    if (activites === "CREATE_USER") {
+    } else if (activites === "UPDATE_USER") {
+    } else {
+    }
   };
   return (
     <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 lg:mt-60 md:mt-30 sm:mt-20 h-200 shadow-2xl mx-auto">
@@ -59,7 +39,7 @@ function SignUp() {
         theme="light"
       />
       <h2 className="text-4xl font-bold ml-30 mb-15">Sign Up Page</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitBtn}>
         <Input
           type="email"
           placeholder="enter the email"
@@ -85,16 +65,19 @@ function SignUp() {
           onChangeHandler={(e) => setUsername(e.target.value)}
         />
         <button type="submit" className="relative left-35 top-8">
-          SignUp
+          {activites}
         </button>
       </form>
       <hr className="my-10" />
-      <h3 className="relative left-25 text-xl">Already Have an account</h3>
-      <button onClick={() => navigate("/signIn")} className="relative left-35">
-        signIn
+      <h3 className="relative left-25 text-xl">
+        Having seconds thought , go to dashboard
+      </h3>
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="relative left-35"
+      >
+        Dashboard
       </button>
     </div>
   );
-}
-
-export default SignUp;
+};

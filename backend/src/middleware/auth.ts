@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-
+import prisma from "../db/client";
 enum sortWays {
   desc,
   Asc,
@@ -22,6 +22,7 @@ export const authVerify = async (
 ) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader?.split(" ")[1];
+  console.log("token", token);
 
   if (!token) {
     res.status(400).json({
@@ -35,12 +36,15 @@ export const authVerify = async (
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
+    console.log("decoded token", decodedToken);
     if (typeof decodedToken === "string") {
+      console.error("error decodedtoken is invalid");
+      res.status(400).json({ message: "token error" });
       return;
     }
-    const user = await prisma?.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
-        id: decodedToken.userId,
+        id: decodedToken.id,
       },
       select: {
         id: true,
@@ -51,6 +55,7 @@ export const authVerify = async (
         isDeleted: true,
       },
     });
+    console.log("user", user);
     if (!user) {
       res.status(400).json({ message: "error in authorization" });
       return;

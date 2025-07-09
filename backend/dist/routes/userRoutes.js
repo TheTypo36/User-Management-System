@@ -5,7 +5,9 @@ const auth_1 = require("../middleware/auth");
 const userController_1 = require("../controllers/userController");
 const router = (0, express_1.Router)();
 router.use(auth_1.authVerify);
-router.get("/", (0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.getAllUser);
+router
+    .route("/get-all-user")
+    .get((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.getAllUser);
 router
     .route("/get-profile-by-id/:id")
     .get((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.getProfileById);

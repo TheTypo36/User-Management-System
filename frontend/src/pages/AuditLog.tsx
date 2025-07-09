@@ -17,10 +17,16 @@ export interface auditInterface {
 }
 const AuditLog = () => {
   const [allAudit, setAllAudit] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios
-      .get(API_URLS.GET_AUDITS())
+      .get(API_URLS.GET_AUDITS(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         setAllAudit(response.data);
       })

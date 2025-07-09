@@ -23,10 +23,10 @@ export const getAllUser = async (req: newReq, res: Response) => {
   } = req.query;
 
   const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
-
+  console.log("skip", skip);
   try {
     const where: any = {
-      deletedAt: null,
+      isDeleted: false,
       ...(search && {
         OR: [
           { username: { contains: search, mode: "insensitive" } },

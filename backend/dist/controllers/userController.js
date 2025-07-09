@@ -19,8 +19,9 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     var _a;
     const { limit = 10, page = 1, role = "", sortBy = "createdAt", search = "", sortOrder = "desc", } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
+    console.log("skip", skip);
     try {
-        const where = Object.assign(Object.assign({ deletedAt: null }, (search && {
+        const where = Object.assign(Object.assign({ isDeleted: false }, (search && {
             OR: [
                 { username: { contains: search, mode: "insensitive" } },
                 { email: { contains: search, mode: "insensitive" } },
@@ -312,7 +313,16 @@ const getAllAudits = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.status(403).json({ message: "insufficient permission" });
             return;
         }
-        const audits = yield client_1.default.auditLog.findMany();
+        const audits = yield client_1.default.auditLog.findMany({
+            include: {
+                user: {
+                    select: {
+                        username: true,
+                        role: true,
+                    },
+                },
+            },
+        });
         res.status(202).json({ audits, message: "succesfully fetch all audits" });
     }
     catch (error) {
