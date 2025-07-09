@@ -4,13 +4,20 @@ import { API_URLS } from "../config";
 import UserCard from "../components/UserCard";
 import { useAuth, type UserData } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-
+interface paginationInterface {
+  page: number;
+  limit: number;
+  totalCount: number;
+  totalPages: number;
+}
 const Dashboard = () => {
   const navigate = useNavigate();
   const [allUsers, setAllUsers] = useState([]);
-  const [pagination, setPagination] = useState({});
+  const [pagination, setPagination] = useState<paginationInterface>();
   const { isLoggedIn, user } = useAuth();
 
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   if (!isLoggedIn) {
     navigate("/signIn");
   }
@@ -21,7 +28,7 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get(API_URLS.GET_ALL_USERS(), {
+      .get(API_URLS.GET_ALL_USERS(page, limit), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,12 +37,12 @@ const Dashboard = () => {
       .then((response) => {
         console.log(response.data);
         setAllUsers(response.data.users);
-        setPagination(response.data.setPagination);
+        setPagination(response.data.pagination);
       })
       .catch((error) => {
         throw new Error(error);
       });
-  }, []);
+  }, [limit, page]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-6">
@@ -71,12 +78,30 @@ const Dashboard = () => {
         </div>
 
         <div className="flex justify-center">
+          {pagination && (
+            <button
+              disabled={pagination.page - 1 < 0}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              prev page
+            </button>
+          )}
           <button
             onClick={() => navigate(`/user-activites/Create_User/0`)}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
           >
             + Add New User
           </button>
+          {pagination && (
+            <button
+              disabled={pagination.page + 1 > pagination.totalPages}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              next page
+            </button>
+          )}
         </div>
       </div>
     </div>

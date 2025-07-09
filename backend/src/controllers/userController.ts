@@ -52,7 +52,7 @@ export const getAllUser = async (req: newReq, res: Response) => {
           createdAt: true,
         },
         skip,
-        take: limit as number,
+        take: parseInt(limit as string),
         orderBy: { [sortBy as string]: sortOrder },
       }),
       prisma.user.count({ where }),

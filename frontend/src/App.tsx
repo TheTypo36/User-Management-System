@@ -5,16 +5,22 @@ function App() {
   const handleStart = () => {
     navigate("/landing-page");
   };
+
   return (
-    <div className="flex justify-center items-center flex-col ml-40 w-full h-full">
-      <h1 className="m-5">Hello, </h1>
-      <h1 className="m-5">Systrome Networks Pvt Ltd.</h1>
-      <p className="m-5">
-        Thanks for giving me opportunity as to build a assingment project for
-        you
+    <div className="min-h-screen flex sm:w-100 md:w-160 lg:w-250 flex-col justify-center items-center bg-gradient-to-br from-gray-100 to-gray-300 px-4 text-center">
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">Hello,</h1>
+      <h1 className="text-2xl font-semibold text-indigo-700 mb-4">
+        Systrome Networks Pvt Ltd.
+      </h1>
+      <p className="text-gray-600 mb-6 max-w-md">
+        Thanks for giving me the opportunity to build an assignment project for
+        you.
       </p>
-      <button className="text-white" onClick={handleStart}>
-        let's start
+      <button
+        onClick={handleStart}
+        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
+      >
+        Let’s Start
       </button>
     </div>
   );

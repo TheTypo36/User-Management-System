@@ -42,7 +42,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     createdAt: true,
                 },
                 skip,
-                take: limit,
+                take: parseInt(limit),
                 orderBy: { [sortBy]: sortOrder },
             }),
             client_1.default.user.count({ where }),
