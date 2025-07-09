@@ -197,7 +197,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
         const audit = yield client_1.default.auditLog.create({
             data: {
-                action: "DETETED_USER",
+                action: "Delete_User",
                 performedBy: userId,
                 target: existingUser === null || existingUser === void 0 ? void 0 : existingUser.email,
                 ipAddress: req.ip,
@@ -252,7 +252,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const id = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
         const audit = yield client_1.default.auditLog.create({
             data: {
-                action: "USER_CREATED",
+                action: "Create_User",
                 performedBy: id,
                 ipAddress: req.ip,
                 target: user.email,

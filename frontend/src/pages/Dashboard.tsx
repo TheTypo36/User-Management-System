@@ -48,7 +48,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <button onClick={() => navigate(`/user-activites/Create_User`)}>
+      <button onClick={() => navigate(`/user-activites/Create_User/0`)}>
         add user
       </button>
     </div>

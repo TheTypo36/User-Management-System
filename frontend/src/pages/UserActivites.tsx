@@ -3,14 +3,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
+import { API_URLS } from "../config";
 
 export const UserActivites = () => {
   const navigate = useNavigate();
-  const { activites } = useParams<{ activites: string }>();
+  const { activites, id } = useParams<{ activites: string; Id: string }>();
+
+  const numericId = parseInt(id);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const { isLoggedIn, user } = useAuth();
+  const [role, setRole] = useState("USER");
+  const { isLoggedIn, user, token } = useAuth();
 
   if (!isLoggedIn) {
     navigate("/signIn");
@@ -20,7 +25,37 @@ export const UserActivites = () => {
   }
   const handleSubmitBtn = () => {
     if (activites === "Create_User") {
+      axios.post(
+        API_URLS.CREATE_USER(),
+        {
+          email,
+          password,
+          username,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
     } else if (activites === "Updated_User") {
+      axios.post(
+        API_URLS.UPDATE_USER(id),
+        {
+          email,
+          password,
+          username,
+          role,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
     } else {
     }
   };
@@ -38,7 +73,7 @@ export const UserActivites = () => {
         pauseOnHover
         theme="light"
       />
-      <h2 className="text-4xl font-bold ml-30 mb-15">{activites} Page</h2>
+      <h2 className="text-4xl font-bold ml-20 mb-5">{activites} Page</h2>
       <form onSubmit={handleSubmitBtn}>
         <Input
           type="email"
@@ -64,11 +99,23 @@ export const UserActivites = () => {
           label="Username"
           onChangeHandler={(e) => setUsername(e.target.value)}
         />
-        <button type="submit" className="relative left-35 top-8">
+        <h2 className="text-xl ">Role: </h2>
+        <select
+          className="bg-amber-50 w-30 h-10 shadow-2xs p-2"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          {user?.role === "ADMIN" && <option value="ADMIN">ADMIN</option>}
+          <option value="SUB_ADMIN">SUB_ADMIN</option>
+          <option defaultChecked value="USER">
+            USER
+          </option>
+        </select>
+        <button type="submit" className="relative left-4 top-15">
           {activites}
         </button>
       </form>
-      <hr className="my-10" />
+      <hr className="mt-20 mb-10" />
       <h3 className="relative left-15 text-xl">
         Having seconds thought , go to dashboard
       </h3>

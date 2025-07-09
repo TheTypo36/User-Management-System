@@ -26,7 +26,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auditlog" element={<AuditLog />} />
           <Route
-            path="/user-activites/:activites"
+            path="/user-activites/:activites/:id"
             element={<UserActivites />}
           />
         </Routes>
