@@ -178,6 +178,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 createdAt: true,
                 updateAt: true,
                 isDeleted: true,
+                avatar: true,
             },
         });
         if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && (existingUser === null || existingUser === void 0 ? void 0 : existingUser.role) !== "USER") {

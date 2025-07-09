@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -57,7 +68,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: user.id,
             email: user.email,
             role: user.role,
-        }, process.env.SECRET_JWT, {
+        }, process.env.JWT_SECRET, {
             expiresIn: "48h",
         });
         res
@@ -111,10 +122,11 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: existingUser.id,
             email: existingUser.email,
             role: existingUser.role,
-        }, process.env.JWT_SCERET, {
+        }, process.env.JWT_SECRET, {
             expiresIn: "48h",
         });
-        res.status(200).json({ token, message: "user successully signed" });
+        const { password: string } = existingUser, user = __rest(existingUser, ["password"]);
+        res.status(200).json({ user, token, message: "user successully signed" });
     }
     catch (error) {
         res

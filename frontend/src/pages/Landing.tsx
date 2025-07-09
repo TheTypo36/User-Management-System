@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
+  if (isLoggedIn) {
+    navigate("/profile");
+  }
+
   return (
     <div className="m-auto flex justify-center items-center flex-col ml-60 w-full h-full">
       <h1>Hey Everyone</h1>

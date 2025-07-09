@@ -17,10 +17,10 @@ function Header() {
       {isLoggedIn && (
         <div>
           <h2>hello, {user?.username}</h2>
-          {user?.role === "USER" && (
+          {user?.role !== "USER" && (
             <button onClick={() => navigate("/dashboard")}>Dashboard</button>
           )}
-          {user?.role === "USER" && (
+          {user?.role !== "USER" && (
             <button onClick={() => navigate("/auditlog")}>Audit logs</button>
           )}
           <button onClick={handlelogout}>logout</button>

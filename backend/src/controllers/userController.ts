@@ -201,6 +201,7 @@ export const deleteUser = async (req: newReq, res: Response) => {
         createdAt: true,
         updateAt: true,
         isDeleted: true,
+        avatar: true,
       },
     });
 

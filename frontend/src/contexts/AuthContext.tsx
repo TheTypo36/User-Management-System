@@ -13,6 +13,7 @@ export interface UserData {
   createdAt: Date;
   updatedAt: Date;
   isDeletedBy: boolean;
+  avatar: string;
 }
 
 interface AuthContextInterface {
@@ -40,6 +41,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       createdAt: new Date(), // You can store actual date if needed
       updatedAt: new Date(),
       isDeletedBy: localStorage.getItem("isDeleted") === "true",
+      avatar: localStorage.getItem("avatar") || "",
     };
 
     if (storedToken && storedUser.username) {
@@ -58,8 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.setItem("email", user.email);
     localStorage.setItem("role", user.role);
     localStorage.setItem("token", newToken);
-    localStorage.setItem("id", user.id.toString());
-    localStorage.setItem("isDeleted", user.isDeletedBy.toString());
+    localStorage.setItem("avatar", user.avatar);
   };
 
   const logout = () => {

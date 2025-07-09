@@ -60,7 +60,7 @@ export const register = async (req: Request, res: Response) => {
         email: user.email,
         role: user.role,
       },
-      process.env.SECRET_JWT as string,
+      process.env.JWT_SECRET as string,
       {
         expiresIn: "48h",
       }
@@ -120,13 +120,14 @@ export const signIn = async (req: Request, res: Response) => {
         email: existingUser.email,
         role: existingUser.role,
       } as JwtPayload,
-      process.env.JWT_SCERET as string,
+      process.env.JWT_SECRET as string,
       {
         expiresIn: "48h",
       }
     );
+    const { password: string, ...user } = existingUser;
 
-    res.status(200).json({ token, message: "user successully signed" });
+    res.status(200).json({ user, token, message: "user successully signed" });
   } catch (error) {
     res
       .status(500)

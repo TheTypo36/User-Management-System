@@ -8,6 +8,9 @@ import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Header from "./pages/Header.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
+import Profile from "./pages/Profile.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
+import AuditLog from "./pages/AuditLog.tsx";
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <BrowserRouter>
@@ -18,6 +21,9 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/landing-page" element={<LandingPage />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/signIn" element={<SignIn />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/auditlog" element={<AuditLog />} />
         </Routes>
       </StrictMode>
     </BrowserRouter>

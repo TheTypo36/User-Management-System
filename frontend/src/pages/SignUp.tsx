@@ -4,10 +4,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URLS } from "../config";
 import { toast, ToastContainer } from "react-toastify";
+import { useAuth } from "../contexts/AuthContext";
 
 function SignUp() {
   const navigate = useNavigate();
-
+  const { login, isLoggedIn } = useAuth();
+  if (isLoggedIn) {
+    navigate("/profile");
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -30,12 +34,11 @@ function SignUp() {
           },
         }
       )
-      .then((Response) => {
-        console.log(Response);
-        if (Response) {
-          toast.success(Response.data.message);
-          navigate("/signIn");
-        }
+      .then((response) => {
+        console.log(response);
+        login(response.data.user, response.data.token);
+        toast.success("user successfully register and logged In");
+        navigate("/profile");
       })
       .catch((error) => {
         toast.error(`${error.message}`);
@@ -44,7 +47,7 @@ function SignUp() {
   return (
     <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 h-200 shadow-2xl">
       <ToastContainer
-        position="bottom-right"
+        position="top-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={true}
