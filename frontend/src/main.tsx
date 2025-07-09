@@ -11,6 +11,7 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import Profile from "./pages/Profile.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import AuditLog from "./pages/AuditLog.tsx";
+import { UserActivites } from "./pages/UserActivites.tsx";
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
     <BrowserRouter>
@@ -24,6 +25,10 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auditlog" element={<AuditLog />} />
+          <Route
+            path="/user-activites/:activites"
+            element={<UserActivites />}
+          />
         </Routes>
       </StrictMode>
     </BrowserRouter>

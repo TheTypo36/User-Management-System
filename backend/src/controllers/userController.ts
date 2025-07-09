@@ -222,7 +222,7 @@ export const deleteUser = async (req: newReq, res: Response) => {
     const userId = req.user?.id as number;
     const audit = await prisma.auditLog.create({
       data: {
-        action: "DETETED_USER",
+        action: "Delete_User",
         performedBy: userId,
         target: existingUser?.email,
         ipAddress: req.ip,
@@ -279,7 +279,7 @@ export const createUser = async (req: newReq, res: Response) => {
 
     const audit = await prisma.auditLog.create({
       data: {
-        action: "USER_CREATED",
+        action: "Create_User",
         performedBy: id,
         ipAddress: req.ip,
         target: user.email,

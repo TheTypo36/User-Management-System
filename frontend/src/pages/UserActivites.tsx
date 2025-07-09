@@ -19,8 +19,8 @@ export const UserActivites = () => {
     navigate("/profile");
   }
   const handleSubmitBtn = () => {
-    if (activites === "CREATE_USER") {
-    } else if (activites === "UPDATE_USER") {
+    if (activites === "Create_User") {
+    } else if (activites === "Updated_User") {
     } else {
     }
   };
@@ -38,7 +38,7 @@ export const UserActivites = () => {
         pauseOnHover
         theme="light"
       />
-      <h2 className="text-4xl font-bold ml-30 mb-15">Sign Up Page</h2>
+      <h2 className="text-4xl font-bold ml-30 mb-15">{activites} Page</h2>
       <form onSubmit={handleSubmitBtn}>
         <Input
           type="email"
@@ -69,7 +69,7 @@ export const UserActivites = () => {
         </button>
       </form>
       <hr className="my-10" />
-      <h3 className="relative left-25 text-xl">
+      <h3 className="relative left-15 text-xl">
         Having seconds thought , go to dashboard
       </h3>
       <button
