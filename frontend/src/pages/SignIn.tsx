@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_URLS } from "../config";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -9,6 +11,16 @@ function SignIn() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(email, password);
+    axios.post(
+      API_URLS.LOGIN(),
+      {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
   };
   return (
     <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 h-170 shadow-2xl">

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signIn = exports.register = void 0;
+exports.logout = exports.signIn = exports.register = void 0;
 const client_1 = __importDefault(require("../db/client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -57,7 +57,9 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: user.id,
             email: user.email,
             role: user.role,
-        }, process.env.SECRET_JWT);
+        }, process.env.SECRET_JWT, {
+            expiresIn: "48h",
+        });
         res
             .status(200)
             .json({ user, token, message: "user successfull created!!" });
@@ -109,7 +111,9 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             id: existingUser.id,
             email: existingUser.email,
             role: existingUser.role,
-        }, process.env.JWT_SCERET);
+        }, process.env.JWT_SCERET, {
+            expiresIn: "48h",
+        });
         res.status(200).json({ token, message: "user successully signed" });
     }
     catch (error) {
@@ -120,3 +124,12 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signIn = signIn;
+const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: `internal server error ${error}` });
+    }
+});
+exports.logout = logout;

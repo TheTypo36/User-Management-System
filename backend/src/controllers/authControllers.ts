@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../db/client";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { newReq } from "../middleware/auth";
 export const register = async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
@@ -59,7 +60,10 @@ export const register = async (req: Request, res: Response) => {
         email: user.email,
         role: user.role,
       },
-      process.env.SECRET_JWT as string
+      process.env.SECRET_JWT as string,
+      {
+        expiresIn: "48h",
+      }
     );
     res
       .status(200)
@@ -116,7 +120,10 @@ export const signIn = async (req: Request, res: Response) => {
         email: existingUser.email,
         role: existingUser.role,
       } as JwtPayload,
-      process.env.JWT_SCERET as string
+      process.env.JWT_SCERET as string,
+      {
+        expiresIn: "48h",
+      }
     );
 
     res.status(200).json({ token, message: "user successully signed" });
@@ -125,5 +132,13 @@ export const signIn = async (req: Request, res: Response) => {
       .status(500)
       .json({ message: `internal server error in user creation ${error}` });
     console.error(error);
+  }
+};
+
+export const logout = async (req: newReq, res: Response) => {
+  try {
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `internal server error ${error}` });
   }
 };
