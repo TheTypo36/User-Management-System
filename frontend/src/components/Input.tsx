@@ -6,6 +6,7 @@ interface inputProps {
   label: string;
   id: string;
 }
+
 function Input({
   placeholder,
   value,
@@ -15,12 +16,15 @@ function Input({
   id,
 }: inputProps) {
   return (
-    <div className="m-4 flex flex-col w-full h-full text-2xl">
-      <label htmlFor={id} className="m-2">
+    <div className="w-full flex flex-col gap-2">
+      <label
+        htmlFor={id}
+        className="text-base md:text-lg font-medium text-gray-700"
+      >
         {label}
       </label>
       <input
-        className="p-2 bg-gray-100 rounded-md w-sm h-15"
+        className="p-3 md:p-4 rounded-md border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200 text-sm md:text-base"
         type={type}
         value={value}
         placeholder={placeholder}

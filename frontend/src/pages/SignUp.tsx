@@ -37,7 +37,7 @@ function SignUp() {
       .then((response) => {
         console.log(response);
         login(response.data.user, response.data.token);
-        toast.success("user successfully register and logged In");
+        toast.success("User successfully registered and logged in");
         navigate("/profile");
       })
       .catch((error) => {
@@ -45,7 +45,7 @@ function SignUp() {
       });
   };
   return (
-    <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 lg:mt-40 md:mt-30 sm:mt-20 h-185 shadow-2xl mx-auto lg:ml-170">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -58,47 +58,53 @@ function SignUp() {
         pauseOnHover
         theme="light"
       />
-      <h2 className="text-4xl font-bold ml-30 mb-15">Sign Up Page</h2>
-      <form onSubmit={handleSubmit}>
-        <Input
-          type="email"
-          placeholder="enter the email"
-          id="email"
-          value={email}
-          label="Email"
-          onChangeHandler={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="enter the password"
-          id="password"
-          value={password}
-          label="Password"
-          onChangeHandler={(e) => setPassword(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="enter the username"
-          id="username"
-          value={username}
-          label="Username"
-          onChangeHandler={(e) => setUsername(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="relative left-35 top-8  bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
-        >
-          SignUp
-        </button>
-      </form>
-      <hr className="my-10" />
-      <h3 className="relative left-25 text-xl">Already Have an account</h3>
-      <button
-        onClick={() => navigate("/signIn")}
-        className="relative left-37 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
-      >
-        signIn
-      </button>
+      <div className="w-full max-w-2xl mt-20 bg-white shadow-lg rounded-xl px-8 py-10 md:px-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-indigo-700">
+          Sign Up
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            id="email"
+            value={email}
+            label="Email"
+            onChangeHandler={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Enter your password"
+            id="password"
+            value={password}
+            label="Password"
+            onChangeHandler={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Enter your username"
+            id="username"
+            value={username}
+            label="Username"
+            onChangeHandler={(e) => setUsername(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+          >
+            Sign Up
+          </button>
+        </form>
+
+        <div className="mt-10 text-center">
+          <p className="text-gray-600 text-sm">Already have an account?</p>
+          <button
+            onClick={() => navigate("/signIn")}
+            className="mt-3 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
