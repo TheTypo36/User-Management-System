@@ -17,7 +17,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex sm:w-100 md:w-160 lg:w-250 flex-col justify-center items-center bg-gradient-to-br from-gray-100 to-gray-300 px-4 text-center">
+    <div className="sm:ml-30 lg:ml-50 min-h-screen flex sm:w-100 md:w-160 lg:w-250 flex-col justify-center items-center bg-gradient-to-br from-gray-100 to-gray-300 px-4 text-center">
       <h1 className="text-4xl font-bold text-gray-800 mb-4">Hello,</h1>
       <h1 className="text-2xl font-semibold text-indigo-700 mb-4">
         Systrome Networks Pvt Ltd.

@@ -12,7 +12,7 @@ const Profile = () => {
     return <h1>Your account is disabled</h1>;
   } else {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250">
+      <div className="flex items-center justify-center min-h-screen mt-10 bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250 xl:w-400">
         <div className="bg-white shadow-lg rounded-2xl p-8 w-full sm:w-80 md:w-160 lg:w-200 max-w-2xl text-center">
           <h1 className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-4">
             {user?.role}

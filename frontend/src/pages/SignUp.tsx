@@ -45,7 +45,7 @@ function SignUp() {
       });
   };
   return (
-    <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 lg:mt-60 md:mt-30 sm:mt-20 h-200 shadow-2xl mx-auto">
+    <div className="bg-gray-400 p-10 w-150 rounded-xl ml-50 pl-20 lg:mt-40 md:mt-30 sm:mt-20 h-185 shadow-2xl mx-auto lg:ml-170">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -84,13 +84,19 @@ function SignUp() {
           label="Username"
           onChangeHandler={(e) => setUsername(e.target.value)}
         />
-        <button type="submit" className="relative left-35 top-8">
+        <button
+          type="submit"
+          className="relative left-35 top-8  bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
+        >
           SignUp
         </button>
       </form>
       <hr className="my-10" />
       <h3 className="relative left-25 text-xl">Already Have an account</h3>
-      <button onClick={() => navigate("/signIn")} className="relative left-35">
+      <button
+        onClick={() => navigate("/signIn")}
+        className="relative left-37 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
+      >
         signIn
       </button>
     </div>

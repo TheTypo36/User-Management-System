@@ -13,7 +13,7 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 to-white px-4 sm:w-100 md:w-180 lg:w-250">
+    <div className=" sm:ml-30 lg:ml-50 flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 to-white px-4 sm:w-100 md:w-180 lg:w-250">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">Hey Everyone 👋</h1>
 
       <div className="flex gap-6">

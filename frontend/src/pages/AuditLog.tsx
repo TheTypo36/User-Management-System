@@ -38,7 +38,7 @@ const AuditLog = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 mt-50 sm:w-100 lg:w-250 md:w-200 px-4 md:px-12">
+    <div className=" sm:ml-30 lg:ml-50 min-h-screen bg-gray-100 py-10 mt-50 sm:w-100 lg:w-250 md:w-200 px-4 md:px-12">
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
         Recent Activities
       </h1>

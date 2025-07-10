@@ -81,7 +81,7 @@ const Dashboard = () => {
           {pagination && (
             <button
               disabled={pagination.page - 1 < 0}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              className="bg-indigo-600 m-3 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
               onClick={() => setPage((prev) => prev - 1)}
             >
               prev page
@@ -89,14 +89,14 @@ const Dashboard = () => {
           )}
           <button
             onClick={() => navigate(`/user-activities/Create_User`)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+            className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
           >
             + Add New User
           </button>
           {pagination && (
             <button
               disabled={pagination.page + 1 > pagination.totalPages}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
               onClick={() => setPage((prev) => prev + 1)}
             >
               next page
