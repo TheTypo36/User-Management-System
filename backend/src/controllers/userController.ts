@@ -188,7 +188,7 @@ export const updateProfile = async (req: newReq, res: Response) => {
 export const deactivateUser = async (req: newReq, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-
+    const isDeleted = req.body.isDeleted;
     if (!id) {
       res.status(400).json({ message: "userid required" });
       return;
@@ -222,7 +222,7 @@ export const deactivateUser = async (req: newReq, res: Response) => {
         id,
       },
       data: {
-        isDeleted: true,
+        isDeleted: isDeleted,
       },
     });
 

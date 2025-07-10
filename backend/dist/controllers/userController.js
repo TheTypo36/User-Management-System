@@ -169,6 +169,7 @@ const deactivateUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
     var _a, _b;
     try {
         const id = parseInt(req.params.id);
+        const isDeleted = req.body.isDeleted;
         if (!id) {
             res.status(400).json({ message: "userid required" });
             return;
@@ -198,7 +199,7 @@ const deactivateUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 id,
             },
             data: {
-                isDeleted: true,
+                isDeleted: isDeleted,
             },
         });
         const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;

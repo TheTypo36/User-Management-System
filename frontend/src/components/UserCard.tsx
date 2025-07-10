@@ -35,29 +35,28 @@ const UserCard = ({ user }: userProps) => {
   };
 
   const handleDeactivate = () => {
-    if (!isDeleted) {
-      axios
-        .put(
-          API_URLS.DEACTIVATE_USER(id),
-          { isDeleted: true },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          toast.success("Successfully deactivated");
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    }
+    axios
+      .put(
+        API_URLS.DEACTIVATE_USER(id),
+        { isDeleted: !isDeleted },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        toast.success("Successfully deactivated");
+        window.location.reload();
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   };
 
   return (
     <div
       className={`${
-        isDeleted ? "bg-gray-200 opacity-60 pointer-events-none" : "bg-white"
+        isDeleted ? "bg-gray-200 opacity-60" : "bg-white"
       } text-gray-800 rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 hover:shadow-lg transition duration-300 w-full`}
     >
       <ToastContainer position="top-right" autoClose={5000} theme="light" />
@@ -102,14 +101,19 @@ const UserCard = ({ user }: userProps) => {
         <button
           className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition"
           onClick={handleEdit}
+          disabled={isDeleted}
         >
           Edit
         </button>
         <button
-          className="text-sm px-3 py-1 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition"
+          className={`text-sm px-3 py-1 ${
+            isDeleted
+              ? "bg-green-400 text-white hover:bg-green-600"
+              : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+          }  rounded  transition`}
           onClick={handleDeactivate}
         >
-          Deactivate
+          {isDeleted ? "Reactivate" : "Deactivate"}
         </button>
         <button
           className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
