@@ -25,8 +25,9 @@ const ProfileById = () => {
   }, [numericId]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250 mt-40     ">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full sm:w-80 md:w-160 lg:w-200 max-w-2xl text-center">
+        {user?.isDeleted && <h1>Deactivated</h1>}
         <h1 className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-4">
           {user?.role}
         </h1>

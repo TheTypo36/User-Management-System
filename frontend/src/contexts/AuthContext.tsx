@@ -22,6 +22,7 @@ interface AuthContextInterface {
   isLoggedIn: boolean;
   login: (user: UserData, token: string) => void;
   logout: () => void;
+  setUser: (user: UserData) => void;
 }
 
 const AuthContext = createContext<AuthContextInterface | null>(null);
@@ -62,6 +63,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.setItem("token", newToken);
     localStorage.setItem("avatar", user.avatar);
   };
+  const setUser = (user: UserData) => {
+    setAuthUser(user);
+    localStorage.setItem("username", user.username);
+    localStorage.setItem("email", user.email);
+    localStorage.setItem("role", user.role);
+    localStorage.setItem("avatar", user.avatar);
+    // etc.
+  };
 
   const logout = () => {
     setAuthUser(null);
@@ -76,6 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isLoggedIn,
     login,
     logout,
+    setUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -2,75 +2,66 @@ import { useNavigate } from "react-router-dom";
 import { useAuth, type UserData } from "../contexts/AuthContext";
 import axios from "axios";
 import { API_URLS } from "../config";
-import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 interface userProps {
   user: UserData;
 }
 
-const UserCard = (props: userProps) => {
-  const { avatar, username, email, createdAt, role, id, isDeleted } =
-    props.user;
+const UserCard = ({ user }: userProps) => {
+  const { avatar, username, email, createdAt, role, id, isDeleted } = user;
   const navigate = useNavigate();
   const { token } = useAuth();
+
   const handleClick = () => {
-    navigate(`/ProfileById/${id}`);
+    if (!isDeleted) navigate(`/ProfileById/${id}`);
   };
+
   const handleEdit = () => {
-    navigate(`/user-activities/Update_User/${id}`);
+    if (!isDeleted) navigate(`/user-activities/Update_User/${id}`);
   };
+
   const handleDelete = (e: any) => {
     e.preventDefault();
-    axios.delete(API_URLS.DELETE_USER(id), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    });
-  };
-  const handleDeactivate = () => {
-    axios
-      .put(
-        API_URLS.DEACTIVATE_USER(id),
-        {
-          isDeleted: true,
+    if (!isDeleted) {
+      axios.delete(API_URLS.DELETE_USER(id), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        toast.success("success full deactivated");
-      })
-      .catch((error) => {
-        throw new Error(error);
+        withCredentials: true,
       });
+    }
+  };
+
+  const handleDeactivate = () => {
+    if (!isDeleted) {
+      axios
+        .put(
+          API_URLS.DEACTIVATE_USER(id),
+          { isDeleted: true },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          toast.success("Successfully deactivated");
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
   };
 
   return (
     <div
       className={`${
-        isDeleted ? "bg-red-300" : "text-white"
-      } rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 hover:shadow-lg transition duration-300 w-full`}
+        isDeleted ? "bg-gray-200 opacity-60 pointer-events-none" : "bg-white"
+      } text-gray-800 rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 hover:shadow-lg transition duration-300 w-full`}
     >
-      {/* Avatar and basic info */}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick={true}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <ToastContainer position="top-right" autoClose={5000} theme="light" />
+
+      {/* Avatar and Basic Info */}
       <div
         className="flex items-center gap-4 min-w-[250px] cursor-pointer"
         onClick={handleClick}
@@ -81,12 +72,23 @@ const UserCard = (props: userProps) => {
           className="w-14 h-14 rounded-full object-cover border border-gray-300"
         />
         <div className="flex flex-col">
-          <div className="text-lg font-semibold text-gray-800">{username}</div>
+          <div
+            className={`text-lg font-semibold ${
+              isDeleted ? "line-through text-red-700" : ""
+            }`}
+          >
+            {username}
+            {isDeleted && (
+              <span className="ml-2 text-xs text-red-600 font-medium">
+                [Deactivated]
+              </span>
+            )}
+          </div>
           <div className="text-sm text-gray-500">{email}</div>
         </div>
       </div>
 
-      {/* Role and creation time */}
+      {/* Role and Created Time */}
       <div className="flex flex-col sm:items-end text-right min-w-[120px]">
         <div className="text-sm text-indigo-600 font-medium">{role}</div>
         <div className="text-xs text-gray-400 whitespace-nowrap">

@@ -26,7 +26,6 @@ export const getAllUser = async (req: newReq, res: Response) => {
   console.log("skip", skip);
   try {
     const where: any = {
-      isDeleted: false,
       ...(search && {
         OR: [
           { username: { contains: search, mode: "insensitive" } },
@@ -201,6 +200,7 @@ export const deactivateUser = async (req: newReq, res: Response) => {
         id,
       },
       select: {
+        id: true,
         username: true,
         email: true,
         role: true,

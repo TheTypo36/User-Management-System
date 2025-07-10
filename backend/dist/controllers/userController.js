@@ -21,7 +21,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     console.log("skip", skip);
     try {
-        const where = Object.assign(Object.assign({ isDeleted: false }, (search && {
+        const where = Object.assign(Object.assign({}, (search && {
             OR: [
                 { username: { contains: search, mode: "insensitive" } },
                 { email: { contains: search, mode: "insensitive" } },
@@ -178,6 +178,7 @@ const deactivateUser = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 id,
             },
             select: {
+                id: true,
                 username: true,
                 email: true,
                 role: true,

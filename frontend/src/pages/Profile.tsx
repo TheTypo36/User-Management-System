@@ -9,7 +9,11 @@ const Profile = () => {
     navigate("/signIn");
   }
   if (user?.isDeleted === true) {
-    return <h1>Your account is disabled</h1>;
+    return (
+      <h1 className="absolute top-70 left-130 bg-black text-red-700 p-5 text-4xl">
+        Your account is disabled
+      </h1>
+    );
   } else {
     return (
       <div className="flex items-center justify-center min-h-screen mt-10 bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250 xl:w-400">
