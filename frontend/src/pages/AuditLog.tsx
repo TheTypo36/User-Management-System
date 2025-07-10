@@ -21,6 +21,7 @@ const AuditLog = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    console.log("in audit log useEffect");
     axios
       .get(API_URLS.GET_AUDITS(), {
         headers: {
