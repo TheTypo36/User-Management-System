@@ -49,6 +49,7 @@ export const getAllUser = async (req: newReq, res: Response) => {
           email: true,
           role: true,
           createdAt: true,
+          isDeleted: true,
         },
         skip,
         take: parseInt(limit as string),

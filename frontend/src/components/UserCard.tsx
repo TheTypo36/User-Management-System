@@ -9,6 +9,7 @@ interface userProps {
 }
 
 const UserCard = ({ user }: userProps) => {
+  console.log("isDeleted", user.isDeleted);
   const { avatar, username, email, createdAt, role, id, isDeleted } = user;
   const navigate = useNavigate();
   const { token } = useAuth();

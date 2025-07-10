@@ -40,6 +40,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     email: true,
                     role: true,
                     createdAt: true,
+                    isDeleted: true,
                 },
                 skip,
                 take: parseInt(limit),
