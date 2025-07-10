@@ -326,7 +326,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createUser = createUser;
 const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b, _c;
     try {
         const id = parseInt(req.params.id);
         if (!id) {
@@ -338,6 +338,7 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 id,
             },
             select: {
+                id: true,
                 username: true,
                 email: true,
                 password: true,
@@ -350,7 +351,13 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(404).json({ message: "no user found with this email" });
             return;
         }
-        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "SUB_ADMIN" && existingUser.role !== "USER") {
+        if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) === "user" && existingUser.id != req.user.id) {
+            res.status(403).json({ message: "insuccifient permission" });
+            return;
+        }
+        if (((_b = req.user) === null || _b === void 0 ? void 0 : _b.role) === "SUB_ADMIN" &&
+            existingUser.role !== "USER" &&
+            !(((_c = req.user) === null || _c === void 0 ? void 0 : _c.id) === (existingUser === null || existingUser === void 0 ? void 0 : existingUser.id))) {
             res.status(403).json({ message: "insuccifient permission" });
             return;
         }

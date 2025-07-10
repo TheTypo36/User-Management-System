@@ -368,6 +368,7 @@ export const getProfileById = async (req: newReq, res: Response) => {
         id,
       },
       select: {
+        id: true,
         username: true,
         email: true,
         password: true,
@@ -381,8 +382,15 @@ export const getProfileById = async (req: newReq, res: Response) => {
       res.status(404).json({ message: "no user found with this email" });
       return;
     }
-
-    if (req.user?.role === "SUB_ADMIN" && existingUser.role !== "USER") {
+    if (req.user?.role === "user" && existingUser.id != req.user.id) {
+      res.status(403).json({ message: "insuccifient permission" });
+      return;
+    }
+    if (
+      req.user?.role === "SUB_ADMIN" &&
+      existingUser.role !== "USER" &&
+      !(req.user?.id === existingUser?.id)
+    ) {
       res.status(403).json({ message: "insuccifient permission" });
       return;
     }

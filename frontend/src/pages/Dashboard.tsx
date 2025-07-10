@@ -21,11 +21,11 @@ const Dashboard = () => {
   if (!isLoggedIn) {
     navigate("/signIn");
   }
-  if (user?.role === "USER") {
-    navigate("/profile");
-  }
 
   useEffect(() => {
+    if (user?.role === "USER") {
+      navigate("/profile");
+    }
     const token = localStorage.getItem("token");
     axios
       .get(API_URLS.GET_ALL_USERS(page, limit), {
@@ -88,7 +88,7 @@ const Dashboard = () => {
             </button>
           )}
           <button
-            onClick={() => navigate(`/user-activities/Create_User`)}
+            onClick={() => navigate(`/user-activities/Create_User/0`)}
             className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
           >
             + Add New User

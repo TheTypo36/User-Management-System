@@ -44,9 +44,9 @@ export const UserActivites = () => {
   if (!isLoggedIn) {
     navigate("/signIn");
   }
-  if (user?.role === "USER") {
-    navigate("/profile");
-  }
+  // if (user?.role === "USER") {
+  //   navigate("/profile");
+  // }
 
   const handleSubmitBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +74,12 @@ export const UserActivites = () => {
         )
         .then(() => {
           toast.success("User updated");
-          navigate("/dashboard");
+
+          if (user?.role == "ADMIN" || user?.role == "SUB_ADMIN") {
+            navigate("/dashboard");
+          } else {
+            navigate("/profile");
+          }
         })
         .catch((error) => {
           throw new Error(error);
@@ -85,7 +90,7 @@ export const UserActivites = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 mt-20">
       <ToastContainer
         position="top-right"
         autoClose={5000}

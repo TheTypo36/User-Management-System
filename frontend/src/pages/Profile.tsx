@@ -30,6 +30,14 @@ const Profile = () => {
             <div>
               createdAt: {new Date(user?.createdAt || "").toLocaleString()}
             </div>
+            <button
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+              onClick={() =>
+                navigate(`/user-activities/Update_User/${user?.id}`)
+              }
+            >
+              edit profile
+            </button>
           </div>
         </div>
       </div>

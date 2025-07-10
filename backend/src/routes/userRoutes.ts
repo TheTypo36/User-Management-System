@@ -19,16 +19,12 @@ router
   .route("/get-all-user")
   .get(authorize(["ADMIN", "SUB_ADMIN"]), getAllUser);
 
-router
-  .route("/get-profile-by-id/:id")
-  .get(authorize(["ADMIN", "SUB_ADMIN"]), getProfileById);
+router.route("/get-profile-by-id/:id").get(getProfileById);
 router
   .route("/create-user")
   .post(authorize(["ADMIN", "SUB_ADMIN"]), createUser);
 router.route("/get-profile").get(getProfile);
-router
-  .route("/update-profile/:id")
-  .put(authorize(["ADMIN", "SUB_ADMIN"]), updateProfile);
+router.route("/update-profile/:id").put(updateProfile);
 router
   .route("/deactivate-user/:id")
   .put(authorize(["ADMIN", "SUB_ADMIN"]), deactivateUser);

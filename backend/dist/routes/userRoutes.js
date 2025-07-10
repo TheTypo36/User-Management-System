@@ -8,16 +8,12 @@ router.use(auth_1.authVerify);
 router
     .route("/get-all-user")
     .get((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.getAllUser);
-router
-    .route("/get-profile-by-id/:id")
-    .get((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.getProfileById);
+router.route("/get-profile-by-id/:id").get(userController_1.getProfileById);
 router
     .route("/create-user")
     .post((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.createUser);
 router.route("/get-profile").get(userController_1.getProfile);
-router
-    .route("/update-profile/:id")
-    .put((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.updateProfile);
+router.route("/update-profile/:id").put(userController_1.updateProfile);
 router
     .route("/deactivate-user/:id")
     .put((0, auth_1.authorize)(["ADMIN", "SUB_ADMIN"]), userController_1.deactivateUser);
