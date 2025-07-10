@@ -17,10 +17,10 @@ const API_URLS = {
   GET_PROFILE_BY_ID: (userId: number) =>
     `${BASE_URL}${import.meta.env.VITE_USER_GET_PROFILE_BY_ID}/${userId}`,
   GET_AUDITS: () => `${BASE_URL}${import.meta.env.VITE_USER_ALL_AUDITS}`,
-  GET_ALL_USERS: (page: number, limit: number) =>
+  GET_ALL_USERS: (page: number, limit: number, search: string) =>
     `${BASE_URL}${
       import.meta.env.VITE_USER_GETALL
-    }?page=${page}&limit=${limit}`,
+    }?page=${page}&limit=${limit}&search=${search}`,
 };
 
 export { API_URLS };

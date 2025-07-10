@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,9 +9,11 @@ import { useAuth } from "../contexts/AuthContext";
 function SignIn() {
   const navigate = useNavigate();
   const { login, isLoggedIn } = useAuth();
-  if (isLoggedIn) {
-    navigate("/profile");
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/profile");
+    }
+  }, [isLoggedIn]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

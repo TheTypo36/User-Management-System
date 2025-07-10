@@ -4,45 +4,67 @@ import { API_URLS } from "../config";
 import UserCard from "../components/UserCard";
 import { useAuth, type UserData } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Input from "../components/Input";
+import _ from "lodash";
+
 interface paginationInterface {
   page: number;
   limit: number;
   totalCount: number;
   totalPages: number;
 }
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [allUsers, setAllUsers] = useState([]);
-  const [pagination, setPagination] = useState<paginationInterface>();
   const { isLoggedIn, user } = useAuth();
 
+  const [allUsers, setAllUsers] = useState([]);
+  const [pagination, setPagination] = useState<paginationInterface>();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  if (!isLoggedIn) {
-    navigate("/signIn");
-  }
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/signIn");
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (user?.role === "USER") {
       navigate("/profile");
     }
+  }, [user?.role]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
-    axios
-      .get(API_URLS.GET_ALL_USERS(page, limit), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data);
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          API_URLS.GET_ALL_USERS(page, limit, search),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+
         setAllUsers(response.data.users);
         setPagination(response.data.pagination);
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-  }, [limit, page]);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+
+    const debounced = _.debounce(fetchData, 500);
+    debounced();
+
+    return () => {
+      debounced.cancel();
+    };
+  }, [page, limit, search]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-6 mt-50">
@@ -60,16 +82,27 @@ const Dashboard = () => {
           </p>
         </div>
 
+        {/* Search */}
         <div className="bg-white shadow-xl rounded-2xl p-8 mb-12">
           <h2 className="text-2xl font-semibold text-gray-700 mb-6 border-b pb-2">
             All Users
           </h2>
+
+          <Input
+            label="Search"
+            type="text"
+            placeholder="Search the user..."
+            id="search"
+            onChangeHandler={(e) => setSearch(e.target.value)}
+            value={search}
+          />
+
           {allUsers.length === 0 ? (
             <div className="text-center text-gray-400 py-10">
               No users found.
             </div>
           ) : (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
               {allUsers.map((user: UserData) => (
                 <UserCard key={user.id} user={user} />
               ))}
@@ -77,29 +110,36 @@ const Dashboard = () => {
           )}
         </div>
 
+        {/* Pagination & Create */}
         <div className="flex justify-center">
           {pagination && (
             <button
-              disabled={pagination.page - 1 < 0}
+              disabled={pagination.page - 1 < 1}
               className="bg-indigo-600 m-3 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
-              onClick={() => setPage((prev) => prev - 1)}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             >
-              prev page
+              Prev Page
             </button>
           )}
+
           <button
             onClick={() => navigate(`/user-activities/Create_User/0`)}
-            className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+            className="m-3 bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
           >
             + Add New User
           </button>
+
           {pagination && (
             <button
               disabled={pagination.page + 1 > pagination.totalPages}
               className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
-              onClick={() => setPage((prev) => prev + 1)}
+              onClick={() =>
+                setPage((prev) =>
+                  prev + 1 <= pagination.totalPages ? prev + 1 : prev
+                )
+              }
             >
-              next page
+              Next Page
             </button>
           )}
         </div>
