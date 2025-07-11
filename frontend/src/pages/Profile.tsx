@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import AvatarUpload from "../components/AvatarUpload";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Profile = () => {
             alt="User Avatar"
             className="w-100 h-100 rounded-full mx-auto border border-gray-300 object-cover mb-6"
           />
+          <AvatarUpload userId={user?.id} />
           <h1 className="text-xl font-bold text-gray-800 mb-2">
             {user?.username}
           </h1>

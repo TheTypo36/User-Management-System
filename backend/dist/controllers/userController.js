@@ -107,12 +107,15 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const email = req.body.email;
         const role = req.body.role;
         const isDeleted = req.body.isDeleted;
-        const id = parseInt(req.body.id);
+        const id = parseInt(req.body.id) || parseInt(req.params.id);
+        const avatar = req.body.avatar;
+        console.log("id", id);
         const userTobeUpdate = yield (client_1.default === null || client_1.default === void 0 ? void 0 : client_1.default.user.findUnique({
             where: {
                 id: id,
             },
         }));
+        console.log("user who is doing", user.username, " user who is receving the change", userTobeUpdate === null || userTobeUpdate === void 0 ? void 0 : userTobeUpdate.username);
         if (!userTobeUpdate) {
             res.status(404).json({ message: "user not found" });
             return;
@@ -125,7 +128,7 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             res.status(403).json({ message: "insufficient permission" });
             return;
         }
-        const userData = Object.assign(Object.assign(Object.assign(Object.assign({}, (username && { username })), (email && { email })), (isDeleted !== undefined &&
+        const userData = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, (username && { username })), (email && { email })), (avatar && { avatar })), (isDeleted !== undefined &&
             ((_d = req.user) === null || _d === void 0 ? void 0 : _d.role) !== "USER" && { isDeleted })), (role && ((_e = req.user) === null || _e === void 0 ? void 0 : _e.role) === "ADMIN" && { role: role.toUpp }));
         if (password) {
             userData.password = yield bcrypt_1.default.hash(password, 10);

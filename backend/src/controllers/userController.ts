@@ -116,13 +116,20 @@ export const updateProfile = async (req: newReq, res: Response) => {
     const email = req.body.email;
     const role = req.body.role;
     const isDeleted = req.body.isDeleted;
-    const id = parseInt(req.body.id);
-
+    const id = parseInt(req.body.id) || parseInt(req.params.id);
+    const avatar = req.body.avatar;
+    console.log("id", id);
     const userTobeUpdate = await prisma?.user.findUnique({
       where: {
         id: id,
       },
     });
+    console.log(
+      "user who is doing",
+      user.username,
+      " user who is receving the change",
+      userTobeUpdate?.username
+    );
     if (!userTobeUpdate) {
       res.status(404).json({ message: "user not found" });
       return;
@@ -140,6 +147,7 @@ export const updateProfile = async (req: newReq, res: Response) => {
     const userData = {
       ...(username && { username }),
       ...(email && { email }),
+      ...(avatar && { avatar }),
       ...(isDeleted !== undefined &&
         req.user?.role !== "USER" && { isDeleted }),
       ...(role && req.user?.role === "ADMIN" && { role: role.toUpp }),
