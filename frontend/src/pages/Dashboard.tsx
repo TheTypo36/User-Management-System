@@ -23,7 +23,7 @@ const Dashboard = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState("");
-
+  const [changeui, setChangeui] = useState(0);
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/signIn");
@@ -41,18 +41,23 @@ const Dashboard = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          API_URLS.GET_ALL_USERS(page, limit, search),
-          {
+        axios
+          .get(API_URLS.GET_ALL_USERS(page, limit, search), {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             withCredentials: true,
-          }
-        );
-
-        setAllUsers(response.data.users);
-        setPagination(response.data.pagination);
+          })
+          .then((response) => {
+            setAllUsers(response.data.users);
+            setPagination(response.data.pagination);
+            console.log(
+              "page",
+              pagination?.page,
+              "total page",
+              pagination?.totalPages
+            );
+          });
       } catch (error) {
         console.error("Failed to fetch users:", error);
       }
@@ -64,7 +69,7 @@ const Dashboard = () => {
     return () => {
       debounced.cancel();
     };
-  }, [page, limit, search]);
+  }, [page, limit, search, changeui]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-6 mt-50">
@@ -104,7 +109,7 @@ const Dashboard = () => {
           ) : (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
               {allUsers.map((user: UserData) => (
-                <UserCard key={user.id} user={user} />
+                <UserCard key={user.id} user={user} setChangeui={setChangeui} />
               ))}
             </div>
           )}
@@ -131,7 +136,7 @@ const Dashboard = () => {
 
           {pagination && (
             <button
-              disabled={pagination.page + 1 > pagination.totalPages}
+              disabled={pagination.page === pagination.totalPages}
               className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
               onClick={() =>
                 setPage((prev) =>

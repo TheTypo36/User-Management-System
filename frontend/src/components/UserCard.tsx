@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
 import { useAuth, type UserData } from "../contexts/AuthContext";
 import axios from "axios";
 import { API_URLS } from "../config";
@@ -6,9 +7,10 @@ import { toast, ToastContainer } from "react-toastify";
 
 interface userProps {
   user: UserData;
+  setChangeui: Dispatch<SetStateAction<number>>;
 }
 
-const UserCard = ({ user }: userProps) => {
+const UserCard = ({ user, setChangeui }: userProps) => {
   console.log("isDeleted", user.isDeleted);
   const { avatar, username, email, createdAt, role, id, isDeleted } = user;
   const navigate = useNavigate();
@@ -25,12 +27,18 @@ const UserCard = ({ user }: userProps) => {
   const handleDelete = (e: any) => {
     e.preventDefault();
     if (!isDeleted) {
-      axios.delete(API_URLS.DELETE_USER(id), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      axios
+        .delete(API_URLS.DELETE_USER(id), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        })
+        .then((Response) => {
+          console.log("successfull delete the user", Response);
+          toast.success("successfull delete the user");
+          setChangeui((prev) => prev + 1);
+        });
     }
   };
 
@@ -45,8 +53,9 @@ const UserCard = ({ user }: userProps) => {
         }
       )
       .then((response) => {
-        toast.success("Successfully deactivated");
-        window.location.reload();
+        console.log("successfull deactivated the user", Response);
+        toast.success("successfull deactivated the user");
+        setChangeui((prev) => prev + 1);
       })
       .catch((error) => {
         throw new Error(error);
