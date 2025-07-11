@@ -55,6 +55,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 role: true,
                 createdAt: true,
                 updateAt: true,
+                avatar: true,
                 isDeleted: true,
             },
         });
@@ -100,6 +101,7 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 username: true,
                 email: true,
                 role: true,
+                avatar: true,
                 password: true,
                 createdAt: true,
                 updateAt: true,

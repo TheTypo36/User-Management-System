@@ -1,6 +1,6 @@
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import axios from "axios";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URLS } from "../config";
 import { useAuth } from "../contexts/AuthContext";
@@ -34,29 +34,23 @@ const AvatarUpload = ({ userId }: any) => {
       );
       console.log(url);
       setUploadedUrl(url.data.secure_url);
-
-      const response = await axios.put(
-        API_URLS.UPDATE_USER(numericId),
-        {
-          id: numericId,
-          avatar: uploadedUrl,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      console.log("uploading avatar", response);
-      if (response.status == 202) {
-        window.location.reload();
-      }
     } catch (error) {
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    if (!uploadedUrl) {
+      return;
+    }
+    (async () => {
+      await axios.put(
+        API_URLS.UPDATE_USER(numericId),
+        { id: numericId, avatar: uploadedUrl },
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+      window.location.reload();
+    })();
+  }, [uploadedUrl]);
   return (
     <div>
       +<input type="file" onChange={handleFileChange} />

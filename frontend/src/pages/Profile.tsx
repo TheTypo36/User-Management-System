@@ -5,7 +5,7 @@ import AvatarUpload from "../components/AvatarUpload";
 const Profile = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
-
+  console.log(user?.avatar);
   if (!isLoggedIn) {
     navigate("/signIn");
   }
@@ -23,7 +23,7 @@ const Profile = () => {
             {user?.role}
           </h1>
           <img
-            src={user?.avatar ? user?.avatar : "./avatar.webp"}
+            src={user?.avatar}
             alt="User Avatar"
             className="w-100 h-100 rounded-full mx-auto border border-gray-300 object-cover mb-6"
           />

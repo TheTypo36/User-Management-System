@@ -48,6 +48,7 @@ export const getAllUser = async (req: newReq, res: Response) => {
           username: true,
           email: true,
           role: true,
+          avatar: true,
           createdAt: true,
           isDeleted: true,
         },
@@ -127,9 +128,14 @@ export const updateProfile = async (req: newReq, res: Response) => {
     console.log(
       "user who is doing",
       user.username,
+      "id: ",
+      user?.id,
       " user who is receving the change",
-      userTobeUpdate?.username
+      userTobeUpdate?.username,
+      "id: ",
+      userTobeUpdate?.id
     );
+    console.log("avatar", avatar);
     if (!userTobeUpdate) {
       res.status(404).json({ message: "user not found" });
       return;
@@ -152,7 +158,6 @@ export const updateProfile = async (req: newReq, res: Response) => {
         req.user?.role !== "USER" && { isDeleted }),
       ...(role && req.user?.role === "ADMIN" && { role: role.toUpp }),
     };
-
     if (password) {
       userData.password = await bcrypt.hash(password, 10);
     }
@@ -167,11 +172,13 @@ export const updateProfile = async (req: newReq, res: Response) => {
         email: true,
         username: true,
         role: true,
+        avatar: true,
         createdAt: true,
         updateAt: true,
         isDeleted: true,
       },
     });
+    console.log("user after updation", updatedUser);
 
     const auditLog = await prisma?.auditLog.create({
       data: {

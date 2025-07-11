@@ -43,6 +43,7 @@ export const register = async (req: Request, res: Response) => {
         role: true,
         createdAt: true,
         updateAt: true,
+        avatar: true,
         isDeleted: true,
       },
     });
@@ -93,6 +94,7 @@ export const signIn = async (req: Request, res: Response) => {
         username: true,
         email: true,
         role: true,
+        avatar: true,
         password: true,
         createdAt: true,
         updateAt: true,

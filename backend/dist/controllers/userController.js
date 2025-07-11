@@ -39,6 +39,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                     username: true,
                     email: true,
                     role: true,
+                    avatar: true,
                     createdAt: true,
                     isDeleted: true,
                 },
@@ -115,7 +116,8 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 id: id,
             },
         }));
-        console.log("user who is doing", user.username, " user who is receving the change", userTobeUpdate === null || userTobeUpdate === void 0 ? void 0 : userTobeUpdate.username);
+        console.log("user who is doing", user.username, "id: ", user === null || user === void 0 ? void 0 : user.id, " user who is receving the change", userTobeUpdate === null || userTobeUpdate === void 0 ? void 0 : userTobeUpdate.username, "id: ", userTobeUpdate === null || userTobeUpdate === void 0 ? void 0 : userTobeUpdate.id);
+        console.log("avatar", avatar);
         if (!userTobeUpdate) {
             res.status(404).json({ message: "user not found" });
             return;
@@ -143,11 +145,13 @@ const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 email: true,
                 username: true,
                 role: true,
+                avatar: true,
                 createdAt: true,
                 updateAt: true,
                 isDeleted: true,
             },
         }));
+        console.log("user after updation", updatedUser);
         const auditLog = yield (client_1.default === null || client_1.default === void 0 ? void 0 : client_1.default.auditLog.create({
             data: {
                 action: "Updated_User",
