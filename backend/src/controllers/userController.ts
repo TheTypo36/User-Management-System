@@ -389,6 +389,7 @@ export const getProfileById = async (req: newReq, res: Response) => {
         email: true,
         password: true,
         role: true,
+        avatar: true,
         createdAt: true,
         updateAt: true,
       },

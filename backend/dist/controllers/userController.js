@@ -353,6 +353,7 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 email: true,
                 password: true,
                 role: true,
+                avatar: true,
                 createdAt: true,
                 updateAt: true,
             },

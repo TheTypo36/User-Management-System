@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { API_URLS } from "../config";
+import AvatarUpload from "../components/AvatarUpload";
 
 export const UserActivites = () => {
   const navigate = useNavigate();
@@ -134,6 +135,7 @@ export const UserActivites = () => {
             label="Username"
             onChangeHandler={(e) => setUsername(e.target.value)}
           />
+          <AvatarUpload userId={Number(id)} />
           <div>
             <label className="block text-base md:text-lg font-medium text-gray-700 mb-2">
               Role

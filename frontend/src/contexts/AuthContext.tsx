@@ -56,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setAuthUser(user);
     setToken(newToken);
     setIsLoggedIn(true);
-
+    localStorage.setItem("id", String(user.id));
     localStorage.setItem("username", user.username);
     localStorage.setItem("email", user.email);
     localStorage.setItem("role", user.role);

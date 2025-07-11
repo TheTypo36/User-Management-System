@@ -1,60 +1,101 @@
-import { Cloudinary } from "@cloudinary/url-gen/index";
+import React, { useRef, useState, useEffect, useId } from "react";
 import axios from "axios";
-import React, { use, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { API_URLS } from "../config";
 import { useAuth } from "../contexts/AuthContext";
 
-const AvatarUpload = ({ userId }: any) => {
-  const { user, token } = useAuth();
-  //   const params = useParams<{ id: string }>();
+const AvatarUpload = ({ userId }: { userId: number }) => {
+  const { token } = useAuth();
+  const numericId = userId;
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const numericId = parseInt(userId as string);
-  console.log("numericId", numericId);
-  const [file, setFile] = useState<File | null>(null); // ✅ typed correctly
+  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
-
   const [uploadedUrl, setUploadedUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const selected = files[0]; // ✅ valid File
-    setFile(selected); // ✅ now valid
+    const selected = files[0];
+    setFile(selected);
     setPreview(URL.createObjectURL(selected));
+
     const formData = new FormData();
     formData.append("file", selected);
     formData.append("upload_preset", "avatar_upload");
 
+    setLoading(true);
     try {
-      const url = await axios.post(
+      const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dqzjia8yg/image/upload",
         formData
       );
-      console.log(url);
-      setUploadedUrl(url.data.secure_url);
+      setUploadedUrl(response.data.secure_url);
     } catch (error) {
-      console.log(error);
+      console.error("Upload failed", error);
+    } finally {
+      setLoading(false);
+      window.location.reload();
     }
   };
+
   useEffect(() => {
-    if (!uploadedUrl) {
-      return;
-    }
+    if (!uploadedUrl) return;
+
     (async () => {
-      await axios.put(
-        API_URLS.UPDATE_USER(numericId),
-        { id: numericId, avatar: uploadedUrl },
-        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
-      );
-      window.location.reload();
+      try {
+        await axios.put(
+          API_URLS.UPDATE_USER(numericId),
+          { id: numericId, avatar: uploadedUrl },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+          }
+        );
+        setPreview(uploadedUrl);
+      } catch (error) {
+        console.error("Error updating user avatar:", error);
+      }
     })();
   }, [uploadedUrl]);
+
   return (
-    <div>
-      +<input type="file" onChange={handleFileChange} />
-      {preview && <img src={preview} alt="avatar" width={100} />}
+    <div className="relative w-28 h-28">
+      {preview ? (
+        <img
+          src={preview}
+          alt="avatar"
+          className="w-full h-full object-cover rounded-full border-2 border-gray-300"
+        />
+      ) : (
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="w-full h-full flex items-center justify-center text-3xl text-gray-400 border-2 border-dashed border-gray-300 rounded-full cursor-pointer hover:text-gray-600 transition"
+        >
+          +
+        </div>
+      )}
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        className="hidden"
+      />
+
+      {preview && (
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="absolute bottom-0 right-0 bg-gray-800 text-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition"
+          title="Change Avatar"
+        >
+          +
+        </div>
+      )}
+
+      {loading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
     </div>
   );
 };
