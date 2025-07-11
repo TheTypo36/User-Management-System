@@ -21,7 +21,6 @@ const AuditLog = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    console.log("in audit log useEffect");
     axios
       .get(API_URLS.GET_AUDITS(), {
         headers: {
@@ -30,31 +29,32 @@ const AuditLog = () => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data);
         setAllAudit(response.data.audits);
       })
       .catch((error) => {
-        throw new Error(error);
+        console.error(error);
       });
   }, []);
 
   return (
-    <div className=" sm:ml-30 lg:ml-50 min-h-screen bg-gray-100 py-10 mt-50 sm:w-100 lg:w-250 md:w-200 px-4 md:px-12">
-      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
-        Recent Activities
-      </h1>
+    <div className="min-h-screen bg-gray-50 px-4 py-12 mt-30 sm:px-6 lg:px-10 font-sans">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-12">
+          Recent Activities
+        </h1>
 
-      {allAudit.length === 0 ? (
-        <div className="text-center text-gray-500 text-lg">
-          No recent activities
-        </div>
-      ) : (
-        <div className="w-full flex flex-col gap-6 max-w-4xl mx-auto">
-          {allAudit.map((audit: auditInterface) => (
-            <AuditCard key={audit.id} audit={audit} />
-          ))}
-        </div>
-      )}
+        {allAudit.length === 0 ? (
+          <div className="text-center text-gray-500 text-lg mt-10">
+            No recent activities
+          </div>
+        ) : (
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {allAudit.map((audit: auditInterface) => (
+              <AuditCard key={audit.id} audit={audit} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
