@@ -120,7 +120,11 @@ const Dashboard = () => {
           {pagination && (
             <button
               disabled={pagination.page - 1 < 1}
-              className="bg-indigo-600 m-3 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              className={`${
+                pagination.page === 1
+                  ? "bg-indigo-400 text-white"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
+              } m-3  font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300`}
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             >
               Prev Page
@@ -137,7 +141,11 @@ const Dashboard = () => {
           {pagination && (
             <button
               disabled={pagination.page === pagination.totalPages}
-              className="m-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300"
+              className={`${
+                pagination.page === pagination.totalPages
+                  ? "bg-indigo-400 text-white"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
+              } m-3  font-semibold px-8 py-3 rounded-lg shadow-md transition duration-300`}
               onClick={() =>
                 setPage((prev) =>
                   prev + 1 <= pagination.totalPages ? prev + 1 : prev

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { showSuccess } from "../utils/toastifyUtil";
+import { ToastContainer } from "react-toastify";
 
 function Header() {
   const navigate = useNavigate();
@@ -7,10 +9,23 @@ function Header() {
 
   const handlelogout = () => {
     logout();
+    showSuccess("successfully logout");
   };
 
   return (
     <div className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 min-h-20 h-auto">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0">
         <h1
           onClick={() => navigate("/")}

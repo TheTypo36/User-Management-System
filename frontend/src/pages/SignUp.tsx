@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_URLS } from "../config";
 import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
+import { showError, showSuccess } from "../utils/toastifyUtil";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -36,18 +37,20 @@ function SignUp() {
       )
       .then((response) => {
         console.log(response);
-        login(response.data.user, response.data.token);
-        toast.success("User successfully registered and logged in");
-        navigate("/profile");
+        showSuccess("successfully signedUp");
+        setTimeout(() => {
+          login(response.data.user, response.data.token);
+          navigate("/profile");
+        }, 1000);
       })
       .catch((error) => {
-        toast.error(`${error.message}`);
+        showError(`${error.message}`);
       });
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={true}

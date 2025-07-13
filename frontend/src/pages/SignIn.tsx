@@ -32,13 +32,22 @@ function SignIn() {
       )
       .then((response) => {
         console.log(response);
-        login(response.data.user, response.data.token);
         toast.success("User successfully logged in");
-        navigate("/profile/");
+
+        setTimeout(() => {
+          login(response.data.user, response.data.token);
+          navigate("/profile/");
+        }, 1000);
       })
       .catch((error) => {
         console.error(error);
-        toast.error("Failed to log in");
+        if (error.status == 400) {
+          toast.error(`email or password is incorrect`);
+        } else if (error.status == 404) {
+          toast.error(`user doesn't exists`);
+        } else {
+          toast.error(`Failed to log in ${error}`);
+        }
       });
   };
 
