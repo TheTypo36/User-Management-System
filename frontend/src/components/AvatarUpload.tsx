@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useId } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { API_URLS } from "../config";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,6 +15,8 @@ const AvatarUpload = ({ userId }: { userId: number }) => {
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(file);
+
     const files = e.target.files;
     if (!files || files.length === 0) return;
 

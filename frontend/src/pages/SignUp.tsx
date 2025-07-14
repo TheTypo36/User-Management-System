@@ -3,7 +3,7 @@ import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URLS } from "../config";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { showError, showSuccess } from "../utils/toastifyUtil";
 
