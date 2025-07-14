@@ -9,6 +9,7 @@ function App() {
   };
 
   const { isLoggedIn, user } = useAuth();
+  console.log(user);
 
   useEffect(() => {
     if (isLoggedIn) {

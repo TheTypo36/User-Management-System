@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [changeui, setChangeui] = useState(0);
   useEffect(() => {
+    console.log(setLimit);
     if (!isLoggedIn) {
       navigate("/signIn");
     }

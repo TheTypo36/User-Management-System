@@ -53,7 +53,7 @@ const UserCard = ({ user, setChangeui }: userProps) => {
         }
       )
       .then((response) => {
-        console.log("successfull deactivated the user", Response);
+        console.log("successfull deactivated the user", response);
         toast.success("successfull deactivated the user");
         setChangeui((prev) => prev + 1);
       })
