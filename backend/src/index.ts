@@ -12,15 +12,20 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
+const allowedOrigins = process.env.CLIENT_URLS?.split(",");
+
 app.use(
   cors({
-    origin: process.env.COR_ORIGIN || "http://localhost:5173", // Your frontend URL
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins?.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.get("/", (req, res) => {
   res.send("<h1>hello the root route</h1>");
 });
