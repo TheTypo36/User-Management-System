@@ -5,6 +5,7 @@ import AvatarUpload from "../components/AvatarUpload";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URLS } from "../config";
+import { ToastContainer } from "react-toastify";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,6 +39,18 @@ const Profile = () => {
   } else {
     return (
       <div className="flex items-center justify-center min-h-screen mt-10 bg-gray-100 px-4 sm:w-100 md:w-200 lg:w-250 xl:w-400">
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick={true}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div className="bg-white shadow-lg rounded-2xl p-8 w-full sm:w-80 md:w-160 lg:w-200 max-w-2xl text-center">
           <h1 className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-4">
             {updatedUser?.role}

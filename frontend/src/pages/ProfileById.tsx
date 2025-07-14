@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_URLS } from "../config";
 import type { UserData } from "../contexts/AuthContext";
 
@@ -10,6 +10,7 @@ const ProfileById = () => {
   const id = params.id ?? "";
   const token = localStorage.getItem("token");
   const numericId = parseInt(id);
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get(API_URLS.GET_PROFILE_BY_ID(numericId), {
@@ -45,6 +46,12 @@ const ProfileById = () => {
             createdAt: {new Date(user?.createdAt || "").toLocaleString()}
           </div>
         </div>
+        <button
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+          onClick={() => navigate(`/user-activities/Update_User/${numericId}`)}
+        >
+          edit profile
+        </button>
       </div>
     </div>
   );

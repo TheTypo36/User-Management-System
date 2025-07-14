@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { API_URLS } from "../config";
 import AvatarUpload from "../components/AvatarUpload";
+import { showError, showSuccess } from "../utils/toastifyUtil";
 
 export const UserActivites = () => {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export const UserActivites = () => {
           setRole(response.data.existingUser.role);
         })
         .catch((error) => {
+          showError("failed to fetch the user");
           throw new Error(error);
         });
     }
@@ -61,8 +63,15 @@ export const UserActivites = () => {
             withCredentials: true,
           }
         )
-        .then(() => navigate("/dashboard"))
-        .catch(() => toast.error("Failed to perform the task"));
+        .then(() => {
+          showSuccess("successfull created a user ");
+
+          setInterval(() => navigate("/dashboard"), 1000);
+        })
+        .catch((error) => {
+          showError("failed to create user");
+          console.error(error);
+        });
     } else if (activities === "Update_User") {
       axios
         .put(

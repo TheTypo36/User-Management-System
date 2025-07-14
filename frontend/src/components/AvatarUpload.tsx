@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useId } from "react";
 import axios from "axios";
 import { API_URLS } from "../config";
 import { useAuth } from "../contexts/AuthContext";
+import { showError, showSuccess } from "../utils/toastifyUtil";
 
 const AvatarUpload = ({ userId }: { userId: number }) => {
   const { token } = useAuth();
@@ -54,7 +55,10 @@ const AvatarUpload = ({ userId }: { userId: number }) => {
           }
         );
         setPreview(uploadedUrl);
+        showSuccess("successfull uploaded avatar");
       } catch (error) {
+        showError("failed to upload avatar");
+
         console.error("Error updating user avatar:", error);
       }
     })();
